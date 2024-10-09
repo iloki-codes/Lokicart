@@ -5,9 +5,9 @@ import { Suspense } from 'react';
 import Loader from './components/Loader.tsx';
 import Header from "./components/header.tsx";
 
-const Home = lazy (() => import('./pages/Home.tsx'));
-const Search = lazy (() => import('./pages/Search.tsx'));
-const Cart = lazy (() => import('./pages/Cart.tsx'));
+const Home = lazy (() => import('./pages/home.tsx'));
+const Search = lazy (() => import('./pages/search.tsx'));
+const Cart = lazy (() => import('./pages/cart.tsx'));
 
 // ADMIN ROUTES
 
