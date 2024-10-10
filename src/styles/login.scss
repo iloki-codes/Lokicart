@@ -1,0 +1,73 @@
+.login {
+    color: $color3;
+    height: 90vh;
+    @include flex(column);
+  
+    > main {
+      width: 100%;
+      height: 80%;
+      max-width: 400px;
+      padding: 2rem;
+      @include baseShadow;
+      @include flex(column, center, stretch);
+
+      > h1 {
+        position: relative;
+        left: 8rem;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+      }
+
+      > div {
+        width: 100%;
+        @include flex(column, flex-start, stretch, 0.2rem);
+      
+        > input {
+          color: #ffffff; 
+          @include inputStyle;
+          border: 0.8px solid $color2;
+          border-radius: 5px;
+          font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        > input::placeholder, ::-webkit-datetime-edit {
+          color: $color2;
+        }
+
+        > input[type=date]::-webkit-calendar-picker-indicator {
+          background-color: $color2;
+        }
+        
+        > input[type=date]::-webkit-datetime-edit:focus {
+          color: #ffffff;        
+        }
+      
+        > p {
+          text-align: center;
+          margin: 2rem;
+        }
+  
+        button {
+          width: 70%;
+          margin: auto;
+          height: 3rem;
+          @include btn(unset, #407ef2, #ffffff);
+          @include flex;
+          border: 1px solid #3e7df2;
+          border-radius: 5px;
+          font-size: 1.05rem;
+          
+          > svg {
+            background-color: #ffffff;
+            width: 30%;
+            height: 100%;
+          }
+  
+          > span {
+            width: 100%;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }

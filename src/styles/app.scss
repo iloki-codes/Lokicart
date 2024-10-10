@@ -40,6 +40,8 @@
 
   @import "home";
   @import "./cart.scss";
+  @import "./shipping.scss";
+  @import "./login.scss";
 
   @import "admin-styles/dashboard";
   @import "admin-styles/products";
@@ -51,19 +53,21 @@
   .header{
     @include flex(row, flex-end, stretch, 1.2rem);
     padding: 1rem;
+    background-color: $color1;
 
     .logo{
       width: 30px;
       height: 40px;
       position: absolute;
       left: 20px;
-      top: 5px;
+      top: 6px;
     }
 
     span.logotext{
       position: absolute;
-      left: 43rem;
-      font-size: 2rem;
+      left: 3.8rem;
+      top: 6px;
+      font-size: 1.8rem;
       color: $color2;
       font-family: cursive;
       font-weight: bolder;
@@ -84,6 +88,7 @@
       font-size: 1.2rem;
       cursor: pointer;
       background-color: transparent;
+      color: $color2;
       &:hover {
         color: $color3;
       }

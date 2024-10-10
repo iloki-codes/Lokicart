@@ -9,6 +9,8 @@ const Home = lazy (() => import('./pages/home.tsx'));
 const Search = lazy (() => import('./pages/search.tsx'));
 const Cart = lazy (() => import('./pages/cart.tsx'));
 
+const Login = lazy (() => import('./pages/login.tsx'));
+
 // ADMIN ROUTES
 
 const Dashboard = lazy(() => import("./pages/admin/dashboard.tsx"));
@@ -43,6 +45,10 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />
           <Route path="/cart" element={<Cart />} />
+
+          {/* Before logging in */}
+          <Route path="/login" element={<Login />} />
+
           {/* <Route path="/admin" element={<Admin />} /> */}
 
          {/* <ProtectedRoute isAuthenticated={true} adminRoute={true} isAdmin={true} /> */}
