@@ -11,7 +11,7 @@ type ProductProps = {
 
 // const server = "lorem3";
 
-const Product = ({productId, price, name, photo, stock, handler}: ProductProps) => {
+const Product = ({productId, price, name, photo, handler}: ProductProps) => {
   return (
     
     <div className="product">

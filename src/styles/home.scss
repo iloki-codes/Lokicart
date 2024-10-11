@@ -42,7 +42,7 @@
     height: 22rem;
     padding: 1rem;
     flex: none;
-    background-color: $color2;
+    // background-color: $color2;
     @include flex(column, flex-start, center 4px);
     &:hover > div {
         opacity: 1;
@@ -55,12 +55,13 @@
     }
 
     p {
-        color: $color1;
+        color: $color2;
         font-weight: 600;
         font-size: 1.2rem;
     }
 
     span{
+        color: $color3;
         font-weight: 700;
         font-size: 1.1rem;
     }

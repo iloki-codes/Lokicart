@@ -4,7 +4,7 @@ import { FaHome, FaSearch, FaShoppingBag, FaSignInAlt, FaSignOutAlt, FaUser } fr
 import logo from "../assets/images/loki.png";
 
 
-const user = { _id: "", role: "" };
+const user = { _id: "lorem", role: "" };
 
 const Header = () => {
 

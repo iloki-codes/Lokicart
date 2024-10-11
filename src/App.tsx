@@ -10,6 +10,9 @@ const Search = lazy (() => import('./pages/search.tsx'));
 const Cart = lazy (() => import('./pages/cart.tsx'));
 
 const Login = lazy (() => import('./pages/login.tsx'));
+const Shipping = lazy (() => import('./pages/shipping.tsx'));
+const Orders = lazy (() => import('./pages/orders.tsx'));
+const OrderDetails = lazy (() => import('./pages/order-details.tsx'));
 
 // ADMIN ROUTES
 
@@ -49,30 +52,36 @@ const App = () => {
           {/* Before logging in */}
           <Route path="/login" element={<Login />} />
 
-          {/* <Route path="/admin" element={<Admin />} /> */}
+          {/*Logged in user routes  */}
+          <Route>
+            <Route path="/shipping" element={<Shipping />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/order/:id" element={<OrderDetails />} />
+          </Route>
 
-         {/* <ProtectedRoute isAuthenticated={true} adminRoute={true} isAdmin={true} /> */}
-
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/admin/product" element={<Products />} />
-          <Route path="/admin/customer" element={<Customers />} />
-          <Route path="/admin/transaction" element={<Transaction />} />
+          {/* ADMIN ROUTES */}
+          {/* <ProtectedRoute isAuthenticated={true} adminRoute={true} isAdmin={true} /> */}
+          <Route>
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/admin/product" element={<Products />} />
+            <Route path="/admin/customer" element={<Customers />} />
+            <Route path="/admin/transaction" element={<Transaction />} />
   
          {/* Charts */}
-          <Route path="/admin/chart/bar" element={<Barcharts />} />
-          <Route path="/admin/chart/pie" element={<Piecharts />} />
-          <Route path="/admin/chart/line" element={<Linecharts />} />
+            <Route path="/admin/chart/bar" element={<Barcharts />} />
+            <Route path="/admin/chart/pie" element={<Piecharts />} />
+            <Route path="/admin/chart/line" element={<Linecharts />} />
 
           {/* Apps */}
-          <Route path="/admin/app/coupon" element={<Coupon />} />
-          <Route path="/admin/app/stopwatch" element={<Stopwatch />} />
-          <Route path="/admin/app/toss" element={<Toss />} />
+            <Route path="/admin/app/coupon" element={<Coupon />} />
+            <Route path="/admin/app/stopwatch" element={<Stopwatch />} />
+            <Route path="/admin/app/toss" element={<Toss />} />
 
           {/* Management */}  
-          <Route path="/admin/product/new" element={<NewProduct />} />
-          <Route path="/admin/product/:id" element={<ProductManagement />} />
-          <Route path="/admin/transaction/:id" element={<TransactionManagement />} />
-    
+            <Route path="/admin/product/new" element={<NewProduct />} />
+            <Route path="/admin/product/:id" element={<ProductManagement />} />
+            <Route path="/admin/transaction/:id" element={<TransactionManagement />} />
+          </Route>
       
         </Routes>
       

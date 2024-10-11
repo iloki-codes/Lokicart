@@ -39,9 +39,12 @@
   
 
   @import "home";
-  @import "./cart.scss";
-  @import "./shipping.scss";
-  @import "./login.scss";
+  @import "cart";
+  @import "shipping";
+  @import "login";
+  @import "search";
+  @import "orders";
+  @import "order-details";
 
   @import "admin-styles/dashboard";
   @import "admin-styles/products";
@@ -49,6 +52,18 @@
   @import "admin-styles/dashboardapp";
   @import "admin-styles/mediaquery";
   
+
+  .container{
+    max-width: 1367px; //laptop reso
+    width: 100%;
+    margin: auto;
+    overflow: auto;
+    > h1 {
+      @include heading;
+      margin: 1rem 0;
+      text-align: left;
+    }
+  }
 
   .header{
     @include flex(row, flex-end, stretch, 1.2rem);
@@ -113,7 +128,7 @@
   .admin-container {
     @include grid(1fr 4fr, 2rem);
     height: 100vh;
-    background-color: rgb(247, 247, 247);
+    background-color: #f7f7f7;
     > aside {
       width: 100%;
       background-color: white;
@@ -159,7 +174,7 @@
   
     th {
       font-weight: bold;
-      color: #0000009e;
+      color: $color1;
       font-size: 1.1rem;
       font-weight: 400;
       padding: 2rem 1rem;
