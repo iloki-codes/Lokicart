@@ -9,7 +9,7 @@ import { newProduct,
         getProduct,
         updateProduct, 
         deleteProduct 
-    } from "../controllers/product.js"
+    } from "../controllers/product.js";
 
 
 const productRoute = express.Router();
