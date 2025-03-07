@@ -7,7 +7,7 @@
       color: $color1;
       @include flex;
       position: fixed;
-      top: 2rem;
+      top: 7rem;
       left: 2rem;
       border-radius: 100%;
       border: none;
@@ -34,6 +34,7 @@
         @include heading(2px);
         margin: 2rem;
         text-align: center;
+        color: $color3;
       }
       > input,
       > select {

@@ -120,4 +120,52 @@
         }
     }
 
+    div.emptyCart{
+
+        > video {
+            background: transparent;
+            position: absolute;
+            top: 40%;
+            left: 15%;
+            width: 35vw;
+            height: 15vw;
+            object-fit: cover;
+            clip-path: inset(0% 16% 45% 16%);
+            box-shadow: 0px 10px 30px #000;
+            border-radius: 10px;
+            mix-blend-mode: lighten;
+        }
+    
+    }
+
+    
+    div.gif {
+        position: absolute;
+        right: 10%;
+        top: 25%;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        > img {
+            width: 18vw;
+            height: 28vw;
+        }
+    }
+
+    div.gif:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 0;
+            left: -20rem;
+            font-size: 18px;
+            color: $color2;
+            background-color: #3e3e3e;
+            border: 5px solid $color1;
+            border-radius: 25%;
+            font-style: italic;
+            object-fit: contain;
+    }
+
 }

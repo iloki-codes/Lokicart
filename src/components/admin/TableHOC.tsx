@@ -22,7 +22,7 @@ function TableHOC<T extends Object>(
       columns,
       data,
       initialState: {
-        pageSize: 6,
+        // pageSize: 6,
       },
     };
 
@@ -98,3 +98,13 @@ function TableHOC<T extends Object>(
 }
 
 export default TableHOC;
+
+
+
+// const TableHOC = () => {
+//   return (
+//     <div>TableHOC</div>
+//   )
+// }
+//  export default TableHOC;
+

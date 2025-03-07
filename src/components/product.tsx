@@ -1,30 +1,31 @@
 import {FaPlus} from 'react-icons/fa';
+import { server } from '../redux/store';
+import { ProductProps } from '../types/types';
 
-type ProductProps = {
-    productId: string;
-    photo: string;
-    name: string;
-    price: number;
-    stock: number;
-    handler: () => void;
-};
-
-// const server = "lorem3";
-
-const Product = ({productId, price, name, photo, handler}: ProductProps) => {
+const Product = ({productId, price, name, photo, stock, handler}: ProductProps) => {
   return (
     
     <div className="product">
 
-        <img src={photo} alt={name} />    
+        <img src={`${server}/${photo}`} alt={name} />    
         <p>{name}</p>
         <span>₹ {price}</span>
-
+        
         <div>
-            <button onClick={() => handler()}><FaPlus /></button>
+            <button onClick={() => handler({
+              productId,
+              photo,
+              name,
+              price,
+              stock,
+              quantity: 1
+            })}>
+              <FaPlus />
+            </button>
         </div>
+    
     </div>
   )
-}
+};
 
 export default Product;

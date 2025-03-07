@@ -1,6 +1,6 @@
 .login {
     color: $color3;
-    height: 90vh;
+    height: 100vh;
     @include flex(column);
   
     > main {
@@ -9,11 +9,11 @@
       max-width: 400px;
       padding: 2rem;
       @include baseShadow;
-      @include flex(column, center, stretch);
+      @include flex(column, center, center);
 
       > h1 {
-        position: relative;
-        left: 8rem;
+        // position: relative;
+        // left: 8rem;
         text-transform: uppercase;
         letter-spacing: 4px;
       }
@@ -22,15 +22,27 @@
         width: 100%;
         @include flex(column, flex-start, stretch, 0.2rem);
       
-        > input {
+        > input, select {
           color: #ffffff; 
           @include inputStyle;
           border: 0.8px solid $color2;
           border-radius: 5px;
           font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+          &:hover {
+            cursor: pointer;
+          }
         }
 
-        > input::placeholder, ::-webkit-datetime-edit {
+        > select {
+          
+           > option {
+              background-color: $color2;
+              color: #000;
+           }
+      }
+
+        > input::placeholder, ::-webkit-datetime-edit, select:valid {
           color: $color2;
         }
 
@@ -41,13 +53,34 @@
         > input[type=date]::-webkit-datetime-edit:focus {
           color: #ffffff;        
         }
-      
-        > p {
+
+        > button.submit {
+            margin-top: .5rem;
+            color: $color2; 
+            @include inputStyle;
+            border: 2px solid $color2;
+            border-radius: 5px;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+            &:hover{
+              cursor: pointer;
+              background-color: $color3;
+              color: #000;
+              text-transform: uppercase;
+
+            }
+          }
+
+        > p.or {
           text-align: center;
           margin: 2rem;
         }
+
+        > p.user {
+          text-align: center;
+        }
   
-        button {
+        button.google {
           width: 70%;
           margin: auto;
           height: 3rem;
@@ -56,6 +89,7 @@
           border: 1px solid #3e7df2;
           border-radius: 5px;
           font-size: 1.05rem;
+          margin-top: 2rem;
           
           > svg {
             background-color: #ffffff;

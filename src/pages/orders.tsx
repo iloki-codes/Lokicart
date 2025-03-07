@@ -1,7 +1,13 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import TableHOC from "../components/admin/TableHOC";
 import { Link } from "react-router-dom";
 import { Column } from "react-table";
+import { useSelector } from "react-redux";
+import { UserReducerInitialState } from "../types/reducer.types";
+import { useMyOrdersQuery } from "../redux/api/orderAPI";
+import toast from "react-hot-toast";
+import { CustomError } from "../types/api-types";
+import { DeadLoader } from "../components/Loader";
 
 type DataType = {
     _id: string;
@@ -11,6 +17,10 @@ type DataType = {
     status: ReactElement;
     action: ReactElement;
 }
+
+const arr: Array<DataType> = [
+
+];
 
 const column: Column<DataType>[] = [{
     Header: "ID",
@@ -35,33 +45,58 @@ const column: Column<DataType>[] = [{
 
 const Orders = () => {
     
-    const [rows] = useState<DataType[]>([
 
-        {
-            _id: "lorem5686435464684kljmo",
-            amount: 299,
-            quantity: 100,
-            discount: 59,
-            status: <span className="yellow">Processing</span>,
-            action: <Link to={`/order/lorem5686435464684kljmo`}>View</Link>
-        }   
+    const { user } = useSelector(
+        (state: { userReducer: UserReducerInitialState }) => state.userReducer
+      );
     
-    ]);
-
-    const Table = TableHOC<DataType>(
+      const { data, isLoading, isError, error } = useMyOrdersQuery(user?._id!);
+    
+      const [rows, setRows] = useState<DataType[]>(arr);
+      
+      const Table = TableHOC<DataType>(
         column, 
         rows, 
         "dashboard-product-box",
         "Orders",
         true
-    )();    //fefe
+        )(); 
+      
+      if (isError) toast.error((error as CustomError).data.message);
+    
+      useEffect(() => {
+          
+          if (data) 
+            setRows(
+              data.orders.map( (i) => ({
+                _id: i._id,
+                amount: i.total,
+                discount: i.discount,
+                quantity: i.orderItems.length,
+                status: (
+                  <span className={
+                    i.status === "Processing"
+                    ? "red"
+                    : i.status === "Shipped"
+                    ? "green"
+                    : "purple"
+                  }
+                  >
+                    {i.status}
+                  </span>),
+                action: <Link to={`/admin/transaction/${i._id}`}>Manage</Link>
+              })
+            )
+          )
+        }, [data]);
 
     return (
  
         <div className="container">
             
             <h1>My Orders</h1>
-            {Table}
+
+            { isLoading ? <DeadLoader /> : Table}
             
         </div>
   )

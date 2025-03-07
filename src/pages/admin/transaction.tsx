@@ -1,8 +1,14 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Column } from "react-table";
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import TableHOC from "../../components/admin/TableHOC";
+import { useSelector } from "react-redux";
+import { UserReducerInitialState } from "../../types/reducer.types";
+import { CustomError } from "../../types/api-types";
+import toast from "react-hot-toast";
+import { useGetAllOrdersQuery } from "../../redux/api/orderAPI";
+import { DeadLoader } from "../../components/Loader";
 
 interface DataType {
   user: string;
@@ -13,33 +19,7 @@ interface DataType {
   action: ReactElement;
 }
 
-const arr: Array<DataType> = [
-  {
-    user: "Charas",
-    amount: 4500,
-    discount: 400,
-    status: <span className="red">Processing</span>,
-    quantity: 3,
-    action: <Link to="/admin/transaction/sajknaskd">Manage</Link>,
-  },
-
-  {
-    user: "Xavirors",
-    amount: 6999,
-    discount: 400,
-    status: <span className="green">Shipped</span>,
-    quantity: 6,
-    action: <Link to="/admin/transaction/sajknaskd">Manage</Link>,
-  },
-  {
-    user: "Xavirors",
-    amount: 6999,
-    discount: 400,
-    status: <span className="purple">Delivered</span>,
-    quantity: 6,
-    action: <Link to="/admin/transaction/sajknaskd">Manage</Link>,
-  },
-];
+const arr: Array<DataType> = [];
 
 const columns: Column<DataType>[] = [
   {
@@ -69,7 +49,43 @@ const columns: Column<DataType>[] = [
 ];
 
 const Transaction = () => {
+
+  const { user } = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  );
+
+  const { data, isLoading, isError, error } = useGetAllOrdersQuery(user?._id!);
+
   const [rows, setRows] = useState<DataType[]>(arr);
+
+  
+  if (isError) toast.error((error as CustomError).data.message);
+
+  useEffect(() => {
+      
+      if (data) 
+        setRows(
+          data.orders.map( (i) => ({
+            user: i.user?.name || "Unknown User",
+            amount: i.total,
+            discount: i.discount,
+            quantity: i.orderItems.length,
+            status: (
+              <span className={
+                i.status === "Processing"
+                ? "red"
+                : i.status === "Shipped"
+                ? "green"
+                : "purple"
+              }
+              >
+                {i.status}
+              </span>),
+            action: <Link to={`/admin/transaction/${i._id}`}>Manage</Link>
+          })
+        )
+      )
+    }, [data]);
 
   const Table = TableHOC<DataType>(
     columns,
@@ -78,10 +94,12 @@ const Transaction = () => {
     "Transactions",
     rows.length > 6
   )();
+
+
   return (
     <div className="admin-container">
       <AdminSidebar />
-      <main>{Table}</main>
+      <main>{ isLoading ? <DeadLoader /> : Table}</main>
     </div>
   );
 };

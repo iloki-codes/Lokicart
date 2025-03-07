@@ -4,53 +4,82 @@
     flex-direction: column;
     height: calc(100vh - 4rem);
     width: 100%;
+    overflow-y: scroll;
+    display: inline-block;
+    &::-webkit-scrollbar{display: none;}
+
 
     > section {
+        position: sticky;
+        top: -220px;
+        overflow: hidden;
         width: 95%;
         height: 18.75rem;
         margin: auto;
-        background: url("../assets/images/cover.jpg") no-repeat center / cover;
-        // object-fit: contain;
-        // object-position: 55%;    
+        margin-bottom: -60px;
+        background: url("../assets/images/cover.jpg") no-repeat scroll center / cover;
     }
     
 
     > h1 {
         @include heading(1px);
-        margin-top: 3rem;
+        margin-top: 7rem;
+        margin-bottom: 2rem;
+        padding-left: 50px;
+        text-shadow: 0px 5px 25px $color2;
+        color: #808080;
         @include flex(row, space-between, center);
+        justify-content: center;
     }
 
     .findmore{
+        color: $color3;
         font-size: 1rem;
+        position: relative;
+        right: -20rem;
+        opacity: 0.8;
     }
 
     > main{
+        position: sticky;
+        padding-left: 50px;
+        top: -300px;
+        flex-direction: row;
+        flex-wrap: wrap;
         width: 100%;
         flex: 1;
         display: flex;
         gap: 1rem;
         overflow-x: auto;
+        overflow-y: auto;
+        background-color: #000;
 
         &::-webkit-scrollbar{display: none;}
+        
     }
 }
 
 .product {
     position: relative;
+    left: 6%;
     width: 15.75rem;
     height: 22rem;
     padding: 1rem;
-    flex: none;
-    // background-color: $color2;
+    border-bottom: 1px outset $color3;
+
     @include flex(column, flex-start, center 4px);
+
+    &:hover{
+        border-width: 5px;
+        border-radius: 5%;
+    }
     &:hover > div {
         opacity: 1;
     }
 
     img {
         @include square(calc(15.75rem - 3rem));
-        object-fit: cover;
+        object-fit: contain;
         margin: 1rem;
     }
 

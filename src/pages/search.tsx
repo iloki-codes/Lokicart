@@ -1,21 +1,61 @@
 import { useState } from "react";
 import Product from "../components/product";
 import { FaSearch } from "react-icons/fa";
+import { useGetCategoriesQuery, useSearchProductQuery } from "../redux/api/productAPI";
+import { CustomError } from "../types/api-types";
+import toast from "react-hot-toast";
+import { DeadLoader } from "../components/Loader";
+import { useDispatch } from "react-redux";
+import { CartItem } from "../types/types";
+import { addToCart } from "../redux/reducer/cartReducer";
 
 const Search = () => {
+
+  const { 
+    data:getCategoriesResponse, 
+    isLoading: loadingCategories, 
+    isError, 
+    error } = useGetCategoriesQuery("");
   
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("");
-  const [maxPrice, setMaxPrice] = useState<number>(100000);
+  const [price, setPrice] = useState<number>(100000);
   const [category, setCategory] = useState("");
   const [page, setPage] = useState<number>(1);
 
-  const addToCartHandler = () => {
+  const { 
+    data:searchedData, 
+    isLoading: productLoading, 
+    isError: productIsError, 
+    error: productError 
+  } = useSearchProductQuery({
+    search,
+    sort,
+    category,
+    page,
+    price
+  });
 
-  }
+  console.log(searchedData);
+
+  const dispatch = useDispatch();
+
+  const addToCartHandler = (cartItem: CartItem) => {
+
+    if (cartItem.quantity === 0) return toast.error("Out of stock");
+
+    dispatch(addToCart(cartItem));
+
+    toast.success("Added to cart");
+
+  };
 
   const isPrevPage = page > 1;
   const isNextPage = page < 10;
+
+  if (isError) toast.error((error as CustomError).data.message);
+
+  if (productIsError) toast.error((productError as CustomError).data.message);
 
   return (
     
@@ -41,13 +81,13 @@ const Search = () => {
         </div>  
 
         <div>
-          <h4>Max Price: {maxPrice || ""}</h4>
+          <h4>Max Price: {price || ""}</h4>
           <input
             type="range"
-            min={100}
+            min={10}
             max={100000}
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(Number(e.target.value))}
+            value={price}
+            onChange={(e) => setPrice(Number(e.target.value))}
           />
         </div>
       
@@ -60,15 +100,16 @@ const Search = () => {
             onChange={(e) => setCategory(e.target.value)}
           >
             <option value="">All</option>
-            <option value="dairy">Dairy</option>
-            <option value="spices">Spices</option>
-            <option value="fruits">Fruits & Vegetables</option>
-            <option value="ration">Ration Items</option>
-            <option value="meat">Eggs, meat & fish</option>
-            <option value="drinks">Drinks/Juices</option>
-            <option value="sweets">Sweets</option>
-            <option value="snacks">Snacks</option>
-            <option value="health">Health & Nutrition</option>
+            
+            {
+              !loadingCategories &&
+                getCategoriesResponse?.categories.map( (i) => (
+                  <option key={i} value={i}>
+                    {i.toUpperCase()}
+                  </option>
+                ))
+            }
+
           </select>
         
         </div> 
@@ -88,24 +129,41 @@ const Search = () => {
           /><FaSearch />
         </div>
 
-        <div className="search-list">
-          <Product
-            productId="fdwdwd"
-            name="Coffee"
-            price={299}
-            stock={100}
-            handler={addToCartHandler}
-            photo="https://m.media-amazon.com/images/I/51V2cb0XNjL._SX522_.jpg"
-          />
-        </div>
+        {
+          productLoading ? ( <DeadLoader /> ) : (
 
-        <article>
-          <button disabled={!isPrevPage} onClick={() => setPage((prev) => prev - 1)}>Prev</button>
-          <span>
-            {page} of {4}
-          </span>
-          <button disabled={!isNextPage} onClick={() => setPage((prev) => prev + 1)}>Next</button>
-        </article>
+            <div className="search-list">
+         
+              {
+                searchedData?.products.map( (i) => (
+                  <Product
+                    key={i._id}
+                    productId={i._id}
+                    name={i.name}
+                    price={i.price}
+                    stock={i.stock}
+                    photo={i.photo}
+                    handler={addToCartHandler}
+                  />
+                ))
+              }
+        
+            </div>
+          )
+        }
+
+        {
+          searchedData && searchedData.totalPage > 1 && (
+            <article>    
+              <button disabled={!isPrevPage} onClick={() => setPage((prev) => prev - 1)}>Prev</button>
+              <span>
+                {page} of {searchedData.totalPage}
+              </span>
+              <button disabled={!isNextPage} onClick={() => setPage((prev) => prev + 1)}>Next</button>
+            </article>
+          )
+        }
+      
       </main>
 
     </div>
@@ -115,3 +173,14 @@ const Search = () => {
 }
 
 export default Search;
+
+
+//             <option value="dairy">Dairy</option>
+//             <option value="spices">Spices</option>
+//             <option value="fruits">Fruits & Vegetables</option>
+//             <option value="ration">Ration Items</option>
+//             <option value="meat">Eggs, meat & fish</option>
+//             <option value="drinks">Drinks/Juices</option>
+//             <option value="sweets">Sweets</option>
+//             <option value="snacks">Snacks</option>
+//             <option value="health">Health & Nutrition</option>

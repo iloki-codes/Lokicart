@@ -1,18 +1,28 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { lazy } from 'react';
+import { lazy, useEffect } from 'react';
 import { Suspense } from 'react';
+import { Toaster } from "react-hot-toast";
 
 import Loader from './components/Loader.tsx';
 import Header from "./components/header.tsx";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase.ts";
+import { useDispatch, useSelector } from "react-redux";
+import { userExist, userExistNot } from "./redux/reducer/userReducer.ts";
+import { getUser } from "./redux/api/userAPI.ts";
+import { UserReducerInitialState } from "./types/reducer.types.ts";
 
 const Home = lazy (() => import('./pages/home.tsx'));
 const Search = lazy (() => import('./pages/search.tsx'));
 const Cart = lazy (() => import('./pages/cart.tsx'));
 
 const Login = lazy (() => import('./pages/login.tsx'));
+
+const SafeRoute = lazy(() => import('./components/safe.routes.tsx'));
 const Shipping = lazy (() => import('./pages/shipping.tsx'));
 const Orders = lazy (() => import('./pages/orders.tsx'));
 const OrderDetails = lazy (() => import('./pages/order-details.tsx'));
+const NotFound = lazy (() => import('./pages/not-found.tsx'));
 
 // ADMIN ROUTES
 
@@ -36,11 +46,39 @@ const TransactionManagement = lazy(
 
 const App = () => {
 
-  return (
+  const { user, loading } = useSelector( (state: { userReducer: UserReducerInitialState}
+
+  ) => state.userReducer );
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+
+    onAuthStateChanged(auth, async (user) => {      // this'll be called when something happens in firebase
+  
+      if(user) {
+        console.log("Logged In!");
+
+        const data = await getUser(user.uid);
+
+        dispatch(userExist(data.user));
+
+      } else {
+        console.log("Not Logged In!");
+      
+        dispatch(userExistNot());
+      }
+  
+    });
+  
+  }, []);
+
+  return loading ? <Loader /> : (
 
     <Router>
 
-      <Header />
+      <Header user={user}/>
+
       <Suspense fallback={<Loader />}>
 
         <Routes>
@@ -50,18 +88,26 @@ const App = () => {
           <Route path="/cart" element={<Cart />} />
 
           {/* Before logging in */}
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={
+            <SafeRoute isAuthenticated={user ? false : true}>
+              <Login />
+            </SafeRoute>} />
 
           {/*Logged in user routes  */}
-          <Route>
+          <Route element={<SafeRoute isAuthenticated={user ? true : false} />}>
             <Route path="/shipping" element={<Shipping />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/order/:id" element={<OrderDetails />} />
           </Route>
 
           {/* ADMIN ROUTES */}
-          {/* <ProtectedRoute isAuthenticated={true} adminRoute={true} isAdmin={true} /> */}
-          <Route>
+          
+          <Route element={<SafeRoute
+              isAuthenticated={true}
+              adminRoute={true}
+              isAdmin={user?.role === "admin" ? true : false}
+            />}>
+            
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/product" element={<Products />} />
             <Route path="/admin/customer" element={<Customers />} />
@@ -81,14 +127,18 @@ const App = () => {
             <Route path="/admin/product/new" element={<NewProduct />} />
             <Route path="/admin/product/:id" element={<ProductManagement />} />
             <Route path="/admin/transaction/:id" element={<TransactionManagement />} />
+          
           </Route>
+
+          <Route path="*" element={<NotFound />} />
       
         </Routes>
       
       </Suspense>
     
+      <Toaster position="bottom-center" />
+
     </Router>
-  
   );
 
 }
