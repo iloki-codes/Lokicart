@@ -15,13 +15,13 @@ export const getDashboardStats = TryCatch(
 
         let stats;
 
-        if (nodeCache.has("admin-stats")) 
+        if (nodeCache.has("admin-stats"))
             stats = JSON.parse(nodeCache.get("admin-stats") as string);
-        
+
         else {
 
             const today = new Date();
-            
+
             const lastSixMonths = new Date();
             lastSixMonths.setMonth( lastSixMonths.getMonth() -6 );
 
@@ -41,7 +41,7 @@ export const getDashboardStats = TryCatch(
                     $lte: thisMonth.end
                 }
             });
-            
+
             const lastMonthUsersPromise = User.find({
                 createdAt: {
                     $gte: lastMonth.start,
@@ -55,7 +55,7 @@ export const getDashboardStats = TryCatch(
                     $lte: thisMonth.end
                 }
             });
-            
+
             const lastMonthProductsPromise = Product.find({
                 createdAt: {
                     $gte: lastMonth.start,
@@ -69,7 +69,7 @@ export const getDashboardStats = TryCatch(
                     $lte: thisMonth.end
                 }
             });
-            
+
             const lastMonthOrdersPromise = Order.find({
                 createdAt: {
                     $gte: lastMonth.start,
@@ -139,12 +139,12 @@ export const getDashboardStats = TryCatch(
                     thisMonthRevenue,
                     lastMonthRevenue
                 ),
-                
+
                 user: calculatePercentage(
                         thisMonthUsers.length,
                         lastMonthUsers.length
                     ),
-                
+
                 product: calculatePercentage(
                     thisMonthProducts.length,
                     lastMonthProducts.length
@@ -184,7 +184,7 @@ export const getDashboardStats = TryCatch(
             const categoriesCountPromise = categories.map(
                 (category) => Product.countDocuments({ category })
             );
-            
+
             const categoriesCount = await Promise.all(categoriesCountPromise);
 
             const categoryStats: Record<string, number>[] = [];
@@ -202,7 +202,7 @@ export const getDashboardStats = TryCatch(
                 others: usersCount - maleUserCount - femaleUserCount - lgbtqUserCount
             };
 
-            const modifiedTransaction = latestTransactions.map( 
+            const modifiedTransaction = latestTransactions.map(
                 (i) => ({
                     _id: i._id,
                     discount: i.discount,
@@ -248,7 +248,7 @@ export const getPieCharts = TryCatch(
 
         if(nodeCache.has(key))
             charts = JSON.parse(nodeCache.get(key) as string);
-    
+
         else {
 
             const [
@@ -290,7 +290,7 @@ export const getPieCharts = TryCatch(
             const categoriesCountPromise = categories.map(
                 (category) => Product.countDocuments({ category })
             );
-            
+
             const categoriesCount = await Promise.all(categoriesCountPromise);
 
             const categoryStats: Record<string, number>[] = [];
@@ -307,12 +307,12 @@ export const getPieCharts = TryCatch(
             };
 
             const grossIncome = allOrders.reduce(
-                (prev, order) => prev + (order.total || 0), 
+                (prev, order) => prev + (order.total || 0),
                 0
             );
 
             const discounts = allOrders.reduce(
-                (prev, order) => prev + (order.discount || 0), 
+                (prev, order) => prev + (order.discount || 0),
                 0
             );
 
@@ -334,14 +334,13 @@ export const getPieCharts = TryCatch(
                 discountExpenses: discounts,
                 marketingCost: ads,
                 loss: burnt
-                
+
             };
 
             const userAgeRatio = {
                 "18-": allUsers.filter( (i) => i.age < 18).length,
-                "18-24": allUsers.filter( (i) => i.age >= 18 && i.age <= 24).length,
-                "25-40": allUsers.filter( (i) => i.age > 24 && i.age <= 40).length,
-                "41-60": allUsers.filter( (i) => i.age > 40 && i.age <= 60).length,
+                "18-30": allUsers.filter( (i) => i.age >= 18 && i.age <= 30).length,
+                "31-60": allUsers.filter( (i) => i.age > 30 && i.age <= 60).length,
                 "60+": allUsers.filter( (i) => i.age > 60).length
             }
 
@@ -357,7 +356,7 @@ export const getPieCharts = TryCatch(
                 revenueDistribution,
                 userAgeRatio,
                 adminCustomer
-            
+
             };
 
             nodeCache.set(key, JSON.stringify(charts));
@@ -388,7 +387,7 @@ export const getBarCharts = TryCatch(
         else {
 
             const today = new Date();
-            
+
             const lastSixMonths = new Date();
             lastSixMonths.setMonth( lastSixMonths.getMonth() - 6 );
 
@@ -537,5 +536,5 @@ export const getLineCharts = TryCatch(
             charts
         })
     }
-    
+
 );

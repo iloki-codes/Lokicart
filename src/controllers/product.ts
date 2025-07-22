@@ -9,7 +9,7 @@ import { invalidateCache } from "../utils/features.js";
 // import { faker } from "@faker-js/faker";
 
 export const getProduct = TryCatch(
-    
+
     async (
         req: Request,
         res: Response,
@@ -23,10 +23,10 @@ export const getProduct = TryCatch(
         if(nodeCache.has(`product-${id}`)) {
             product = JSON.parse(nodeCache.get(`product-${id}`) as string);
         }
-        else { 
+        else {
             product = await Product.findById(id);
             if(!product) return next(new ErrorHandler("Unable to find the product", 404));
-            nodeCache.set(`product-${id}`, JSON.stringify(product));            
+            nodeCache.set(`product-${id}`, JSON.stringify(product));
         }
 
         res.status(200).json({
@@ -37,7 +37,7 @@ export const getProduct = TryCatch(
 
 // revalidate on crud product/order
 export const trendingProducts = TryCatch(
-    
+
     async (
         req: Request,
         res: Response,
@@ -50,19 +50,19 @@ export const trendingProducts = TryCatch(
             products = JSON.parse(nodeCache.get("most-bought-products") as string);
         }
         else {
-             products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
+             products = await Product.find({}).sort({ createdAt: -1 });
              nodeCache.set("most-bought-products", JSON.stringify(products));
-            }                                                    // check in cache if it already exists or not and is faster than searching product again
-    
+            }       // check in cache if it already exists or not and is faster than searching product again
+
         res.status(200).json({
             success: true,
-            products,
+            products
         })
 });
 
 
 export const getAllProducts = TryCatch(
-    
+
     async (
         req: Request,
         res: Response,
@@ -87,7 +87,7 @@ export const getAllProducts = TryCatch(
 
 
 export const getCategories = TryCatch(
-    
+
     async (
         req: Request,
         res: Response,
@@ -111,7 +111,7 @@ export const getCategories = TryCatch(
 });
 
 export const newProduct = TryCatch(
-    
+
     async (
         req: Request<{}, {}, NewProductReqBody>,
         res: Response,
@@ -153,7 +153,7 @@ export const newProduct = TryCatch(
 });
 
 export const deleteProduct = TryCatch(
-    
+
     async (
         req: Request,
         res: Response,
@@ -173,7 +173,7 @@ export const deleteProduct = TryCatch(
             productId: String(product._id),
             admin: true
         });
-        
+
          res.status(200).json({
             sucess: true,
             message: "Product deleted successfully"
@@ -183,7 +183,7 @@ export const deleteProduct = TryCatch(
 
 
 export const updateProduct = TryCatch(
-    
+
     async (
         req: Request,
         res: Response,
@@ -209,8 +209,8 @@ export const updateProduct = TryCatch(
         if(price) product.price = price;
         if(stock) product.stock = stock;
         if(category) product.category = category;
-        
-        
+
+
         await product.save();
 
         invalidateCache({
@@ -218,7 +218,7 @@ export const updateProduct = TryCatch(
             productId: String(product._id),
             admin: true
         });
-        
+
          res.status(200).json({
             sucess: true,
             message: "Product updated successfully",
@@ -229,7 +229,7 @@ export const updateProduct = TryCatch(
 
 
 export const searchProduct = TryCatch(
-    
+
     async (
         req: Request<{}, {}, {}, SearchReqQuery>,
         res: Response,
@@ -240,16 +240,14 @@ export const searchProduct = TryCatch(
 
         const page = Number(req.query.page) || 1;
 
-        const limit = Number(process.env.PRODUCT_PER_PAGE) || 5; // first page with 5 products
+        if (page || search || sort || price || category) {
+
+        const limit = Number(process.env.PRODUCT_PER_PAGE) || 20; // first page with 5 products
 
         const skip = (page - 1) * limit;    // skip 5 products and show products after that
 
-        // 1,2,3,4,5 - 1st page
-        // 6,7,8,9,10 - 2nd page = (2-1)*5 = 5 skip
-        // 11,12,13,15 - 3rd page
-
         const baseQuery:BaseQuery = {};
-            
+
             if(search)
                 baseQuery.name = {
                     $regex: search,
@@ -264,16 +262,18 @@ export const searchProduct = TryCatch(
             if(category)
                 baseQuery.category=category;
 
-        const productsPromise = await Product.find(baseQuery).sort(
-                sort && { price: sort === "asc" ? 1 : -1 }
-            ).limit(limit).skip(skip); 
-            
+            const productsPromise = await Product.find(baseQuery).sort(
+                sort && price ? { price: sort === "asc" ? 1 : -1 } : {}
+            ).limit(limit).skip(skip);
+
         const [products, filteredProducts] = await Promise.all([
             productsPromise,
             Product.find(baseQuery)
-        ]); 
+        ]);
 
-        const totalPage = Math.ceil(filteredProducts.length / limit);
+        console.log(filteredProducts);
+
+        const totalPage = limit ? Math.ceil(filteredProducts.length / limit) : 1;
                                                         // ceil(upper limit) opp. of floor(lower limit)
 
         if(!products) return next(new ErrorHandler("Unable to find the product", 404));
@@ -283,4 +283,5 @@ export const searchProduct = TryCatch(
             products,
             totalPage,
         })
+    }
 });

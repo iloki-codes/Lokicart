@@ -5,6 +5,7 @@ import { errorMiddleware } from "./middlewares/error.js";
 import NodeCache from "node-cache";
 import { config } from "dotenv";
 import morgan from "morgan";
+import cors from "cors";
 
 // Importing Routes
 
@@ -27,13 +28,36 @@ const stripeKey = process.env.STRIPE_KEY || "";
 connectDB(db_uri);
 
 export const stripe = new Stripe(stripeKey);
+// const paymentMethodDomain = await stripe.paymentMethodDomains.create(
+//   {
+//     domain_name: 'http://localhost:5173/',
+//   },
+//   {
+//     stripeAccount: '{{acct_1QsA1DB6pTrDeWNX}}',
+//   }
+// );
 
 export const nodeCache = new NodeCache();
 
 const app = express();
 
+app.use(cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+}));
 app.use(express.json());
 app.use(morgan("dev"));
+
+
+// app.options("*", (req: Request, res: Response) => {
+//     res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+//     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//     res.header("Access-Control-Allow-Credentials", "true");
+//     res.sendStatus(200);
+// });
 
 app.get("/", (req:Request, res:Response) => {
     res.send("API working with /api/v1");

@@ -5,7 +5,9 @@ const schema = new mongoose.Schema({
 
     couponCode: {
         type: String,
-        required: [true, "Please enter the Coupon Code"],
+        required: [false, "Please enter the Coupon Code"],
+        default: null,
+        trim: true,
         unique: true
     },
     amount: {

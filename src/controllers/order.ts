@@ -24,9 +24,11 @@ export const newOrder = TryCatch (
             total
         } = req.body;
 
+        console.log(req.body);
+
         if (
             !shippingInfo ||
-            !orderItems ||
+            !orderItems?.length ||
             !user ||
             !subtotal ||
             !tax ||
@@ -46,15 +48,15 @@ export const newOrder = TryCatch (
             discount,
             total
         });
-    
+
         await reduceStock(orderItems);
 
-        invalidateCache({ 
-            product: true, 
+        invalidateCache({
+            product: true,
             order: true,
             admin: true,
             userId: user,
-            productId: order.orderItems.map( (i) => String(i.productId) ) 
+            productId: order.orderItems.map( (i) => String(i.productId) )
         });
 
         return res.status(201).json({
@@ -70,13 +72,13 @@ export const myOrders = TryCatch (
         res: Response,
         next: NextFunction
     ) => {
-    
+
         const { id:user } = req.query;
 
         const key = `order-${user}`;
 
         let orders = [];
-        
+
         if (nodeCache.has(key)) {
             orders = JSON.parse(nodeCache.get(key) as string);
         }
@@ -97,11 +99,11 @@ export const getAllOrders = TryCatch (
         res: Response,
         next: NextFunction
     ) => {
-    
+
         const key = `all-orders`;
 
         let orders = [];
-        
+
         if (nodeCache.has(key)) {
             orders = JSON.parse(nodeCache.get(key) as string);
         }
@@ -122,13 +124,13 @@ export const getOrderDetails = TryCatch (
         res: Response,
         next: NextFunction
     ) => {
-    
+
         const { id } = req.params;
 
         const key = `order-details-${id}`;
 
         let order;
-        
+
         if (nodeCache.has(key)) {
             order = JSON.parse(nodeCache.get(key) as string);
         }
@@ -152,7 +154,7 @@ export const processOrder = TryCatch (
         res: Response,
         next: NextFunction
     ) => {
-    
+
         const { id } = req.params;
 
         const order = await Order.findById(id);
@@ -162,12 +164,15 @@ export const processOrder = TryCatch (
         switch(order.status) {
             case "Processing": order.status="Shipped";
             break;
-            
-            case "Shipped": order.status="Delivered";
+
+            case "Shipped": order.status="On the way";
             break;
 
-            default: order.status="Delivered";
-                break;
+            case "On the way": order.status="Delivered";
+            break;
+
+            default: order.status="Processing";
+            break;
         }
 
         await order.save();
@@ -187,7 +192,7 @@ export const deleteOrder = TryCatch (
         res: Response,
         next: NextFunction
     ) => {
-    
+
         const { id } = req.params;
 
         const order = await Order.findById(id);
@@ -196,7 +201,7 @@ export const deleteOrder = TryCatch (
 
         await order.deleteOne();
 
-        invalidateCache({ 
+        invalidateCache({
             product: false,
             order: true,
             admin: true,

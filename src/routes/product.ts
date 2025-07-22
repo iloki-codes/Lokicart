@@ -30,7 +30,7 @@ productRoute.get("/", (req: Request, res: Response) => {
 productRoute.get("/search", searchProduct);
 
 // route - /api/v1/product/all
-productRoute.get("/all", getAllProducts);
+productRoute.get("/all", isAdmin, getAllProducts);
 
 // route - /api/v1/product/categories
 productRoute.get("/categories", getCategories);

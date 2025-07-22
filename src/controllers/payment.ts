@@ -18,8 +18,13 @@ export const createPayment = TryCatch (
 
         const paymentIntent = await stripe.paymentIntents.create({
             amount: Number(amount) * 100,
-            currency: "INR"
+            currency: "INR",
+            automatic_payment_methods: {
+                enabled: true
+            }
         });
+
+        console.log("amount:", amount);
 
         return res.status(201).json({
             success: true,
@@ -60,11 +65,11 @@ export const applyDiscount = TryCatch (
 
         const discount = await Coupon.findOne({ couponCode });
 
-        if (!discount) return next(new ErrorHandler("Invalid Coupon Code", 400));
+        // if (!discount) return next(new ErrorHandler("Invalid Coupon Code", 400));
 
         return res.status(200).json({
             success: true,
-            discount: discount.amount
+            discount: discount?.amount || 0
         });
     }
 )

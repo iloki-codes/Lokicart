@@ -36,7 +36,8 @@ export type SearchReqQuery = {
     price?: string;
     sort?: string;
     category?: string;
-    page?: string,
+    page?: string;
+    limit?: number;
 }
 
 
