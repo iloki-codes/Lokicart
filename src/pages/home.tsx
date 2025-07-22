@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
-import Product from "../components/product";
-import { useTrendingProductsQuery } from "../redux/api/productAPI";
-import { DeadLoader } from "../components/Loader";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { CartItem } from "../types/types";
+import { Link } from "react-router-dom";
+import { DeadLoader } from "../components/Loader";
+import Product from "../components/product";
+import { useTrendingProductsQuery } from "../redux/api/productAPI";
 import { addToCart } from "../redux/reducer/cartReducer";
+import { CartItem } from "../types/types";
 // import bgc from "../assets/images/cover.jpg";
 
 const Home = () => {
@@ -27,7 +27,7 @@ const Home = () => {
   if(isError) return toast.error("Unable to load the product.");
 
   return (
-    
+
     <div className="home">
 
       <section>
@@ -39,12 +39,12 @@ const Home = () => {
       </h1>
 
       <main>
-      
+
         { isLoading ? (
-            <DeadLoader width="100px" />
+            <DeadLoader length={12} />
           ) : (
             data?.products.map((i) => (
-      
+
               <Product
                 key={i._id}
                 productId={i._id}
@@ -54,7 +54,7 @@ const Home = () => {
                 photo={i.photo}
                 handler={addToCartHandler}
               />
-          
+
             ))
           )
         }
@@ -66,11 +66,3 @@ const Home = () => {
 }
 
 export default Home;
-
-        // photo="https://m.media-amazon.com/images/I/71hAp8MqgSL._SX679_.jpg"
-      
-        // photo="https://m.media-amazon.com/images/I/71-IpDUKTfL._SX522_.jpg"
-  
-        // photo="https://m.media-amazon.com/images/I/71jgwgNvo-L._SX679_.jpg"
-
-        // photo="https://m.media-amazon.com/images/I/61jEkAAeAnL._SX679_.jpg"

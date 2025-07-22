@@ -40,7 +40,7 @@ const AdminSidebar = () => {
   return (
     <>
       {phoneActive && (
-        <button id="hamburger" onClick={() => setShowModal(true)}>
+        <button id="hamburger" style={{top: "4rem"}} onClick={() => setShowModal(true)}>
           <HiMenuAlt4 />
         </button>
       )}
@@ -52,7 +52,7 @@ const AdminSidebar = () => {
                 width: "20rem",
                 height: "100vh",
                 position: "fixed",
-                top: 0,
+                top: "7.6rem",
                 left: showModal ? "0" : "-20rem",
                 transition: "all 0.5s",
               }

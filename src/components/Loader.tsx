@@ -1,18 +1,43 @@
 
 const Loader = () => {
   return (
-    <div className="loader">Loader</div>
+    <section className="loader">
+      <div></div>
+    </section>
   )
 }
 
+export const Loadercss = () => {
+  return (
+    <section style={{height: "calc(100vh - 4rem)",}} className="loader">
+      <div></div>
+    </section>
+  )
+};
+
 export default Loader;
 
-export const DeadLoader = ({width = "unset"} : {width?: string}) => {
-  return (
-    <div className="dead-loader" style={{width}}>
-      <div className="dead"></div>
-      <div className="dead"></div>
-      <div className="dead"></div>
+interface DeadLoaderProps {
+  width?: string;
+  length?: number;
+  height?: string;
+  containerHeight?: string;
+}
+
+export const DeadLoader = ({
+  width = "unset",
+  length = 3,
+  height = "30px",
+  containerHeight = "unset" } : DeadLoaderProps) => {
+
+  const dead = Array.from({ length }, (_, idx) => (
+    <div key={idx} className="deadmoji" style={{ height }}></div>
+  ));
+
+    return (
+    <div className="dead-loader" style={{ width, height: containerHeight }}>
+      {dead}
     </div>
   );
+
 };

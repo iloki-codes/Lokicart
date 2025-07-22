@@ -58,15 +58,15 @@ const Transaction = () => {
 
   const [rows, setRows] = useState<DataType[]>(arr);
 
-  
-  if (isError) toast.error((error as CustomError).data.message);
+
+  if (isError) toast.error((error as CustomError).data.message); console.error(error);
 
   useEffect(() => {
-      
-      if (data) 
+
+      if (data)
         setRows(
           data.orders.map( (i) => ({
-            user: i.user?.name || "Unknown User",
+            user: i.user?.name,
             amount: i.total,
             discount: i.discount,
             quantity: i.orderItems.length,
@@ -99,7 +99,7 @@ const Transaction = () => {
   return (
     <div className="admin-container">
       <AdminSidebar />
-      <main>{ isLoading ? <DeadLoader /> : Table}</main>
+      <main>{ isLoading ? <DeadLoader length={10} /> : Table}</main>
     </div>
   );
 };

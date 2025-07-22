@@ -1,5 +1,5 @@
 import { FaTrash } from "react-icons/fa";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, Navigate } from "react-router-dom";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
 import { Order, OrderItem } from "../../../types/types";
 import { server } from "../../../redux/store";
@@ -9,7 +9,7 @@ import { useDeleteOrderMutation, useGetOrderDetailsQuery, useProcessOrderMutatio
 import { DeadLoader } from "../../../components/Loader";
 import { responseToast } from "../../../types/utils.features";
 
-const defaltData: Order = {
+const defaultData: Order = {
     shippingInfo: {
         address: "",
         city: "",
@@ -17,23 +17,38 @@ const defaltData: Order = {
         state: "",
         pinCode: "",
     },
+    status: "",
     subtotal: 0,
     shippingCharges: 0,
     tax: 0,
     discount: 0,
     total: 0,
-    status: "",
     orderItems: [],
     user: {
         name: "",
         _id: ""
     },
     _id: ""
-}
+};
 
-const TransactionManagement = () => {
+const ProductCard = ({
+  name,
+  photo,
+  price,
+  quantity,
+  productId,
+}: OrderItem) => (
+  <div className="transaction-product-card">
+    <img src={`${server}/${photo}`} alt={name} />
+    <Link to={`/product/${productId}`}>{name}</Link>
+    <span>
+      ₹{price} X {quantity} = ₹{price * quantity}
+    </span>
+  </div>
+);
 
-    
+const TransactionManagement = (): JSX.Element => {
+
     const { user } = useSelector(
         (state: { userReducer: UserReducerInitialState }) => state.userReducer
     );
@@ -42,18 +57,18 @@ const TransactionManagement = () => {
     const navigate = useNavigate();
 
     const { data, isLoading, isError } = useGetOrderDetailsQuery(params._id!);
-  
-    const { 
-        shippingInfo: { address, city, state, country, pinCode }, 
-        orderItems, 
+
+    const {
+        shippingInfo: { address, city, state, country, pinCode },
+        orderItems,
         user:{name},
+        status,
         subtotal,
         shippingCharges,
         tax,
         discount,
         total,
-        status
-    } = data?.order || defaltData;
+    } = data?.order || defaultData;
 
 
     const [updateOrder] = useProcessOrderMutation();
@@ -64,31 +79,32 @@ const TransactionManagement = () => {
             userId: user?._id!,
             orderId: data?.order._id!
         });
-        responseToast(res, navigate, "/admin/transaction");
+        responseToast(res, navigate, "/admin/transaction/");
     };
 
     const updateHandler = async () => {
-    
+
         const res = await updateOrder({
-            userId: user?._id!,
-            orderId: data?.order._id!
+            orderId: data?.order._id!,
+            userId: user?._id!
+
         });
-        responseToast(res, navigate, "/admin/transaction");
+        responseToast(res, navigate, "/admin/transaction/");
     };
 
     // if (isError) return <Navigate to={"/404"} />;
 
-  
+
     return (
-        
+
         <div className="admin-container">
-      
+
             <AdminSidebar />
-        
+
                 <main className="product-management">
-                
-                    { isLoading ? <DeadLoader /> : (
-                
+
+                    { isLoading ? <DeadLoader length={5} /> : (
+
                     <>
 
                         <section
@@ -99,7 +115,7 @@ const TransactionManagement = () => {
                         <h2>Order Items</h2>
 
                         {orderItems.map((i) => (
-                    
+
                             <ProductCard
                                 key={i._id}
                                 name={i.name}
@@ -133,9 +149,13 @@ const TransactionManagement = () => {
                         <p>
                             Status:{" "}
                             <span className={
-                                status === "Delivered"
-                                ? "purple"
+                                status === "Processing"
+                                ? "blue"
                                 : status === "Shipped"
+                                ? "purple"
+                                : status === "On the way"
+                                ? "yellow"
+                                : status === "Delivered"
                                 ? "green"
                                 : "red"
                             }
@@ -147,32 +167,16 @@ const TransactionManagement = () => {
                                 Process Status
                             </button>
                             </article>
-                    
+
                     </>
-                    
+
                     )
                 }
             </main>
-    
+
     </div>
-  
+
     );
 };
-
-const ProductCard = ({
-  name,
-  photo,
-  price,
-  quantity,
-  productId,
-}: OrderItem) => (
-  <div className="transaction-product-card">
-    <img src={`${server}/${photo}`} alt={name} />
-    <Link to={`/product/${productId}`}>{name}</Link>
-    <span>
-      ₹{price} X {quantity} = ₹{price * quantity}
-    </span>
-  </div>
-);
 
 export default TransactionManagement;

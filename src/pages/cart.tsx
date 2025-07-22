@@ -18,9 +18,9 @@ const Cart = () => {
     tax,
     shippingCharges,
     discount,
-    total
+    total,
   } = useSelector((state: { cartReducer: CartReducerInitialState }) => state.cartReducer);
-  
+
   const [couponCode, setCouponCode] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
 
@@ -33,7 +33,7 @@ const Cart = () => {
     dispatch(addToCart({
       ...cartItem, quantity: cartItem.quantity + 1
     }));
-  
+
   };
 
   const decrementHandler = ( cartItem: CartItem ) => {
@@ -42,23 +42,33 @@ const Cart = () => {
     dispatch(addToCart({
       ...cartItem, quantity: cartItem.quantity - 1
     }));
-  
+
   };
-  
+
   const removeHandler = ( productId: string ) => {
     dispatch(removeFromCart(productId));
   }
+
   useEffect(() => {
+
+    const fetchDiscount = () => {
+
+      if (!couponCode) {
+      dispatch(applyDiscount(0));
+      setIsValid(false);
+      dispatch(amountSection());
+      return;
+    }
+
     const { token: cancelToken, cancel } = axios.CancelToken.source();
 
     const timeoutId = setTimeout(() => {
-
       axios.get(`/api/v1/payment/discount?couponCode=${couponCode}`, {
         cancelToken
       })
         .then((res) => {
           console.log(res.data);
-          dispatch(applyDiscount(res.data.discount));
+          dispatch(applyDiscount(res.data.discount ?? 0));
           setIsValid(true);
           dispatch(amountSection());
         })
@@ -76,6 +86,9 @@ const Cart = () => {
       cancel();
       setIsValid(false);
     }
+  };
+
+  fetchDiscount();
   }, [couponCode]);
 
   useEffect(() => {
@@ -85,14 +98,14 @@ const Cart = () => {
   return (
 
     <div className="cart">
-    
+
       <main>
 
         {
           cartItems.length > 0 ?
-                                ( 
+                                (
                                   cartItems.map((i, idx) => (
-                                    <CartItemCard 
+                                    <CartItemCard
                                       incrementHandler={incrementHandler}
                                       decrementHandler={decrementHandler}
                                       removeHandler={removeHandler}
@@ -104,7 +117,7 @@ const Cart = () => {
         }
 
       </main>
-        
+
         {
           cartItems.length > 0 ? (
 
@@ -122,7 +135,7 @@ const Cart = () => {
               }
               <hr />
               <p className="total">Total: ₹{total}</p>
-      
+
               <input
                 type="text"
                 value={couponCode}
@@ -132,22 +145,22 @@ const Cart = () => {
 
               {
                 couponCode &&
-                  ( isValid ? ( 
+                  ( isValid ? (
                   <span className="green">
                     ₹{discount} off using
                     <code> {couponCode}</code>
                   </span>
                   ) : (
                   <span className="red">Invalid Coupon <VscError /></span>
-                ) ) 
+                ) )
               }
-      
+
               {
                 cartItems.length > 0 && <Link to="/shipping">Checkout</Link>
               }
 
             </aside>
-          
+
           ) : (
                 <div className="emptyCart">
                   <video autoPlay loop muted>
@@ -164,7 +177,7 @@ const Cart = () => {
         }
 
     </div>
-  
+
   );
 
 };

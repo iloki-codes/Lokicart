@@ -6,45 +6,45 @@ import { Product } from "../../types/types";
 
 export const productAPI = createApi({
     reducerPath: "productApi",
-    baseQuery: fetchBaseQuery({ 
+    baseQuery: fetchBaseQuery({
         baseUrl: `/api/v1/product/`,
         credentials: "include"
     }),
-   
+
     tagTypes: ["product"],
 
     endpoints: (builder) => ({
-        
-        trendingProducts: builder.query<AllProductsResponse, string>({                   
+
+        trendingProducts: builder.query<AllProductsResponse, string>({
             query: () => ({
                 url: "trending",
                 method: "GET"
             }),
             providesTags: ["product"]
         }),
-        
-        getAllProducts: builder.query<AllProductsResponse, string>({                   
+
+        getAllProducts: builder.query<AllProductsResponse, string>({
             query: (id) => ({
                 url: `all?id=${id}`,
                 method: "GET"
             }),
             providesTags: ["product"]
         }),
-        
-        searchProduct: builder.query<SearchProductResponse, SearchProductRequest>({                   
+
+        searchProduct: builder.query<SearchProductResponse, SearchProductRequest>({
             query: ({ price, search, sort, category, page }) => {
-                let base = `search?search=${search}&page=${page}`;
+                let base =`search?search=${search}&page=${page}`;
 
                 if (price) base += `&price=${price}`;
                 if (sort) base += `&sort=${sort}`;
                 if (category) base += `&category=${category}`;
-
+                // if (limit) base+= `&limit=${limit}`;
                 return base;
             },
             providesTags: ["product"]
         }),
 
-        newProduct: builder.mutation<MessageResponse, NewProductRequest>({                   
+        newProduct: builder.mutation<MessageResponse, NewProductRequest>({
             query: ({ formData, id }) => ({
                 url: `new?id=${id}`,
                 method: "POST",
@@ -53,7 +53,7 @@ export const productAPI = createApi({
             invalidatesTags: ["product"]
         }),
 
-        getCategories: builder.query<getCategoriesResponse, string>({                    
+        getCategories: builder.query<getCategoriesResponse, string>({
             query: () => ({
                 url: "categories",
                 method: "GET"
@@ -61,12 +61,12 @@ export const productAPI = createApi({
             providesTags: ["product"]
         }),
 
-        getProduct: builder.query<ProductResponse, string>({                   
+        getProduct: builder.query<ProductResponse, string>({
             query: (id) => id,
             providesTags: ["product"]
         }),
 
-        updateProduct: builder.mutation<MessageResponse, UpdateProductRequest>({                   
+        updateProduct: builder.mutation<MessageResponse, UpdateProductRequest>({
             query: ({ formData, userId, productId }) => ({
                 url: `${productId}?id=${userId}`,
                 method: "PUT",
@@ -85,7 +85,7 @@ export const productAPI = createApi({
     })
 });
 
-export const { 
+export const {
     useTrendingProductsQuery,
     useGetAllProductsQuery,
     useGetCategoriesQuery,
@@ -97,11 +97,11 @@ export const {
 } = productAPI;
 
 
-// newProduct, 
+// newProduct,
 //         trendingProducts,
-//         searchProduct, 
-//         getAllProducts, 
-//         getCategories, 
+//         searchProduct,
+//         getAllProducts,
+//         getCategories,
 //         getProduct,
-//         updateProduct, 
+//         updateProduct,
 //         deleteProduct

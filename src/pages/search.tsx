@@ -11,23 +11,23 @@ import { addToCart } from "../redux/reducer/cartReducer";
 
 const Search = () => {
 
-  const { 
-    data:getCategoriesResponse, 
-    isLoading: loadingCategories, 
-    isError, 
+  const {
+    data:getCategoriesResponse,
+    isLoading: loadingCategories,
+    isError,
     error } = useGetCategoriesQuery("");
-  
+
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("");
   const [price, setPrice] = useState<number>(100000);
   const [category, setCategory] = useState("");
   const [page, setPage] = useState<number>(1);
 
-  const { 
-    data:searchedData, 
-    isLoading: productLoading, 
-    isError: productIsError, 
-    error: productError 
+  const {
+    data:searchedData,
+    isLoading: productLoading,
+    isError: productIsError,
+    error: productError
   } = useSearchProductQuery({
     search,
     sort,
@@ -58,7 +58,7 @@ const Search = () => {
   if (productIsError) toast.error((productError as CustomError).data.message);
 
   return (
-    
+
     <div className="search">
 
       <aside>
@@ -66,9 +66,9 @@ const Search = () => {
         <h2>Filters</h2>
 
         <div>
-          
+
           <h4>Sort</h4>
-          
+
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
@@ -77,8 +77,8 @@ const Search = () => {
             <option value="asc">Price (Low to High)</option>
             <option value="desc">Price (High to Low)</option>
           </select>
-        
-        </div>  
+
+        </div>
 
         <div>
           <h4>Max Price: {price || ""}</h4>
@@ -90,17 +90,17 @@ const Search = () => {
             onChange={(e) => setPrice(Number(e.target.value))}
           />
         </div>
-      
+
         <div>
-          
+
           <h4>Category</h4>
-          
+
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
             <option value="">All</option>
-            
+
             {
               !loadingCategories &&
                 getCategoriesResponse?.categories.map( (i) => (
@@ -111,11 +111,11 @@ const Search = () => {
             }
 
           </select>
-        
-        </div> 
-      
-      </aside>    
-      
+
+        </div>
+
+      </aside>
+
       <main>
 
         <h1>Products</h1>
@@ -130,10 +130,10 @@ const Search = () => {
         </div>
 
         {
-          productLoading ? ( <DeadLoader /> ) : (
+          productLoading ? ( <DeadLoader length={5} /> ) : (
 
             <div className="search-list">
-         
+
               {
                 searchedData?.products.map( (i) => (
                   <Product
@@ -147,14 +147,14 @@ const Search = () => {
                   />
                 ))
               }
-        
+
             </div>
           )
         }
 
         {
           searchedData && searchedData.totalPage > 1 && (
-            <article>    
+            <article>
               <button disabled={!isPrevPage} onClick={() => setPage((prev) => prev - 1)}>Prev</button>
               <span>
                 {page} of {searchedData.totalPage}
@@ -163,7 +163,7 @@ const Search = () => {
             </article>
           )
         }
-      
+
       </main>
 
     </div>

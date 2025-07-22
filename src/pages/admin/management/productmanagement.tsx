@@ -3,7 +3,7 @@ import { FaTrash } from "react-icons/fa";
 import AdminSidebar from "../../../components/admin/AdminSidebar.tsx";
 import { UserReducerInitialState } from "../../../types/reducer.types.ts";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { useDeleteProductMutation, useGetProductQuery, useUpdateProductMutation } from "../../../redux/api/productAPI.ts";
 import { server } from "../../../redux/store.ts";
 import { DeadLoader } from "../../../components/Loader.tsx";

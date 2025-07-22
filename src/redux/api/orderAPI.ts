@@ -5,7 +5,8 @@ import { MessageResponse, MyOrdersResponse, NewOrderRequest, OrderDetailsRespons
 export const orderAPI = createApi({
     reducerPath: "orderApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: "/api/v1/order"
+        baseUrl: "/api/v1/order",
+        credentials: "include"
     }),
 
     tagTypes: ["orders"],
@@ -18,59 +19,50 @@ export const orderAPI = createApi({
                 body: order,
                 headers: {
                     "Content-Type": "application/json"
-                },
+                }
+            }),
                 invalidatesTags: ["orders"]
-            })
         }),
 
         myOrders: builder.query<MyOrdersResponse, string>({
-            query: (id) => ({
-                url: `my?id=${id}`,
-                method: "GET",
+            query: (id) => `my?id=${id}`,
                 providesTags: ["orders"]
-            })
         }),
 
         getAllOrders: builder.query<MyOrdersResponse, string>({
-            query: (id) => ({
-                url: `all?id=${id}`,
-                method: "GET",
+            query: (id) => `all?id=${id}`,
                 providesTags: ["orders"]
-            })
         }),
 
         getOrderDetails: builder.query<OrderDetailsResponse, string>({
-            query: (id) => ({
-                url: "id",
-                method: "GET",
+            query: (id) => id,
                 providesTags: ["orders"]
-            })
         }),
 
         processOrder: builder.mutation<MessageResponse, ProcessOrderRequest>({
-            query: ({ userId, orderId }) => ({
+            query: ({ orderId, userId }) => ({
                 url:`${orderId}?id=${userId}`,
-                method: "PUT",
+                method: "PUT"
+            }),
                 invalidatesTags: ["orders"]
-            })
         }),
 
         deleteOrder: builder.mutation<MessageResponse, ProcessOrderRequest>({
-            query: ({ userId, orderId }) => ({
+            query: ({ orderId, userId }) => ({
                 url:`${orderId}?id=${userId}`,
-                method: "DELETE",
+                method: "DELETE"
+            }),
                 invalidatesTags: ["orders"]
-            })
         }),
 
     })
 });
 
-export const { 
-    useNewOrderMutation, 
-    useProcessOrderMutation, 
+export const {
+    useNewOrderMutation,
+    useProcessOrderMutation,
     useDeleteOrderMutation,
-    useMyOrdersQuery, 
-    useGetAllOrdersQuery, 
+    useMyOrdersQuery,
+    useGetAllOrdersQuery,
     useGetOrderDetailsQuery
  } = orderAPI;
