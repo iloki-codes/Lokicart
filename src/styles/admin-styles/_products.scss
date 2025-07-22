@@ -7,15 +7,16 @@
 
 .create-product-btn {
   position: fixed;
-  right: 2rem;
-  top: 2rem;
+  right: 4rem;
+  bottom: 6rem;
   @include square(2.5rem);
   @include flex(row, center, center, 0);
   border-radius: 50%;
   background-color: rgb(201, 9, 9);
   color: white;
   &:hover {
-    opacity: 0.8;
+    color: $color2;
+    transform: scale(1.5);
   }
 }
 .product-delete-btn {

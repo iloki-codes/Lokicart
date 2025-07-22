@@ -28,6 +28,20 @@
   .admin-container {
     grid-template-columns: 1fr !important;
   }
+
+  .footer{
+    flex-wrap: wrap;
+    width: 100vw;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    flex-shrink: 2;
+  }
+  footer > * {
+    margin-bottom: 0.5rem;
+
+  }
 }
 
 @media screen and (width<= 768px) {
@@ -73,11 +87,23 @@
       border: 1px solid rgba(212, 212, 212, 0.379);
     }
   }
+
+  .footer{
+    flex-wrap: wrap;
+    width: 100vw;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+  }
+  footer > * {
+    margin-bottom: 0.5rem;
+  }
 }
 
 @media screen and (width<= 600px) {
   .product-management {
-    flex-direction: column;
+    flex-direction: row;;
     align-items: center;
     padding: 0;
     > section {
@@ -105,5 +131,17 @@
     .stopwatch {
       align-items: center;
     }
+  }
+
+  .footer{
+    flex-wrap: wrap;
+    width: 100vw;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+  }
+  footer > * {
+    margin-bottom: 0.5rem;
   }
 }

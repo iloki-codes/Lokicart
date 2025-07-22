@@ -66,7 +66,7 @@ export type CartItemProps = {
 
 export type OrderItem = Omit<CartItem, "stock"> & { _id: string };
 
-export type Order = { 
+export type Order = {
     orderItems: OrderItem[];
     shippingInfo: ShippingInfo;
     subtotal: number;
@@ -81,3 +81,82 @@ export type Order = {
     };
     _id: string;
 };
+
+type CountAndChange = {
+    revenue: number;
+    product: number;
+    user: number;
+    order: number;
+}
+
+type LatestTxn = {
+    _id: string;
+    amount: number;
+    discout: number;
+    quantity: number;
+    status: string;
+}
+
+export type Stats = {
+
+    changePercent: CountAndChange;
+    counts: CountAndChange;
+    chart: {
+        order: number[];
+        revenue: number[];
+       };
+    categoryStats: Record<string, number>[];
+    userRatio: {
+        male: number;
+        female: number;
+        lgbtq: number;
+        others: number;
+    };
+    latestTransactions: LatestTxn[];
+}
+
+export type Pie = {
+
+    orderFullfillment: {
+        processing: number;
+        shipped: number;
+        onTheWay: number;
+        delivered: number;
+        cancelledOrder: number;
+    };
+    categoryStats: Record<string, number>[];
+    stockAvailability: {
+        inStock: number;
+        stockOut: number;
+    };
+    revenueDistribution: {
+        productCost: number;
+        netMargin: number;
+        discountExpenses: number;
+        marketingCost: number;
+        loss: number;
+    };
+    userAgeRatio: {
+        "18-": number;
+        "18-30": number;
+        "31-60": number;
+        "60+": number;
+    };
+    adminCustomer: {
+        admin: number;
+        customer: number;
+    };
+};
+
+export type Bar = {
+    users: number[];
+    products: number[];
+    orders: number[];
+};
+
+export type Line = {
+    users: number[];
+    products: number[];
+    discounts: number[];
+    revenue: number[];
+}

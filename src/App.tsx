@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userExist, userExistNot } from "./redux/reducer/userReducer.ts";
 import { getUser } from "./redux/api/userAPI.ts";
 import { UserReducerInitialState } from "./types/reducer.types.ts";
+import Footer from "./components/footer.tsx";
 
 const Home = lazy (() => import('./pages/home.tsx'));
 const Search = lazy (() => import('./pages/search.tsx'));
@@ -23,6 +24,7 @@ const Shipping = lazy (() => import('./pages/shipping.tsx'));
 const Orders = lazy (() => import('./pages/orders.tsx'));
 const OrderDetails = lazy (() => import('./pages/order-details.tsx'));
 const NotFound = lazy (() => import('./pages/not-found.tsx'));
+const Checkout = lazy(() => import('./pages/checkout.tsx'));
 
 // ADMIN ROUTES
 
@@ -37,12 +39,9 @@ const Coupon = lazy(() => import("./pages/admin/apps/coupon.tsx"));
 const Stopwatch = lazy(() => import("./pages/admin/apps/stopwatch.tsx"));
 const Toss = lazy(() => import("./pages/admin/apps/toss.tsx"));
 const NewProduct = lazy(() => import("./pages/admin/management/newproduct.tsx"));
-const ProductManagement = lazy(
-  () => import("./pages/admin/management/productmanagement.tsx")
-);
-const TransactionManagement = lazy(
-  () => import("./pages/admin/management/transactionmanagement.tsx")
-);
+const ProductManagement = lazy(() => import("./pages/admin/management/productmanagement.tsx"));
+const TransactionManagement = lazy(() => import("./pages/admin/management/transactionmanagement.tsx"));
+
 
 const App = () => {
 
@@ -55,7 +54,7 @@ const App = () => {
   useEffect(() => {
 
     onAuthStateChanged(auth, async (user) => {      // this'll be called when something happens in firebase
-  
+
       if(user) {
         console.log("Logged In!");
 
@@ -65,12 +64,12 @@ const App = () => {
 
       } else {
         console.log("Not Logged In!");
-      
+
         dispatch(userExistNot());
       }
-  
+
     });
-  
+
   }, []);
 
   return loading ? <Loader /> : (
@@ -98,21 +97,22 @@ const App = () => {
             <Route path="/shipping" element={<Shipping />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/order/:id" element={<OrderDetails />} />
+            <Route path="/pay" element={<Checkout />} />
           </Route>
 
           {/* ADMIN ROUTES */}
-          
+
           <Route element={<SafeRoute
               isAuthenticated={true}
               adminRoute={true}
               isAdmin={user?.role === "admin" ? true : false}
             />}>
-            
+
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/product" element={<Products />} />
             <Route path="/admin/customer" element={<Customers />} />
             <Route path="/admin/transaction" element={<Transaction />} />
-  
+
          {/* Charts */}
             <Route path="/admin/chart/bar" element={<Barcharts />} />
             <Route path="/admin/chart/pie" element={<Piecharts />} />
@@ -123,20 +123,22 @@ const App = () => {
             <Route path="/admin/app/stopwatch" element={<Stopwatch />} />
             <Route path="/admin/app/toss" element={<Toss />} />
 
-          {/* Management */}  
+          {/* Management */}
             <Route path="/admin/product/new" element={<NewProduct />} />
             <Route path="/admin/product/:id" element={<ProductManagement />} />
             <Route path="/admin/transaction/:id" element={<TransactionManagement />} />
-          
+
           </Route>
 
           <Route path="*" element={<NotFound />} />
-      
+
         </Routes>
-      
+
       </Suspense>
-    
+
       <Toaster position="bottom-center" />
+
+      <Footer />
 
     </Router>
   );
