@@ -16,24 +16,24 @@ export const connectDB = (uri: string) => {
 export const invalidateCache = (
   {product, order, admin, productId, userId, orderId}: InvalidateCacheProps
 ) => {
-  
+
   if(product) {
 
     const productKeys: string[] = [
       "most-bought-products",
-      "all-products", 
-      "categories", 
+      "all-products",
+      "categories",
       `product-${productId}`
     ];
-    
+
     if (typeof productId === "string") productKeys.push(`product-${productId}`);
 
-    if (typeof productId === "object") 
+    if (typeof productId === "object")
 
       productId.forEach((i) => productKeys.push(`product-${i}`));
 
     nodeCache.del(productKeys);
-  
+
   }
 
   if(order) {
@@ -41,7 +41,7 @@ export const invalidateCache = (
     const orderKeys: string[] = ["getAllOrders",`order-${userId}`, `order-${orderId}`];
 
     nodeCache.del(orderKeys);
-  
+
   }
 
   if(admin){
@@ -75,21 +75,21 @@ export const calculatePercentage = (thisMonth: number, lastMonth: number) => {
 
 };
 
-interface MyDocument {     // extends Document not needed cuz TS expecting object instead of mongoose doc
+export interface MyDocument {     // extends Document not needed cuz TS expecting object instead of mongoose doc
   createdAt: Date;
   discount?: number;
   total?: number;
 }
 
-type FuncProps = { 
-  length: number; 
-  today: Date; 
+type FuncProps = {
+  length: number;
+  today: Date;
   docArr: MyDocument[];
   property?: "discount" | "total";
 };
 
 export const getChartData = ( { length, today, docArr, property } : FuncProps ) => {
-  
+
   const data: number[] = new Array(length).fill(0);
 
   docArr.forEach((i) => {
@@ -99,7 +99,7 @@ export const getChartData = ( { length, today, docArr, property } : FuncProps ) 
       if (monthDiff < length) {
           data[length - monthDiff - 1] += property ? i[property]! : 1; // discount not null
       }
-  
+
   });
 
   return data;
