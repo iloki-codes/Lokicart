@@ -4,7 +4,7 @@ import { nodeCache } from "../app.js";
 import { Product } from "../models/product.js";
 import { User } from "../models/user.js";
 import { Order } from "../models/order.js";
-import { calculatePercentage, getChartData } from "../utils/features.js";
+import { calculatePercentage, getChartData, MyDocument } from "../utils/features.js";
 
 export const getDashboardStats = TryCatch(
     async(
@@ -171,13 +171,13 @@ export const getDashboardStats = TryCatch(
             const orderMonthsCounts = getChartData({
                 length: 6,
                 today,
-                docArr: lastSixMonthsOrders
+                docArr: lastSixMonthsOrders as MyDocument[]
             });
 
             const orderMonthlyRevenue = getChartData({
                 length: 6,
                 today,
-                docArr: lastSixMonthsOrders,
+                docArr: lastSixMonthsOrders as MyDocument[],
                 property: "total"
             });
 
@@ -440,7 +440,7 @@ export const getBarCharts = TryCatch(
             const orderCounts = getChartData({
                 length: 12,
                 today,
-                docArr: orders
+                docArr: orders as MyDocument[]
             });
 
             charts = {
@@ -509,14 +509,14 @@ export const getLineCharts = TryCatch(
             const discounts = getChartData({
                 length: 12,
                 today,
-                docArr: orders,
+                docArr: orders as MyDocument[],
                 property: "discount"
             });
 
             const revenue = getChartData({
                 length: 12,
                 today,
-                docArr: orders,
+                docArr: orders as MyDocument[],
                 property: "total"
             });
 
