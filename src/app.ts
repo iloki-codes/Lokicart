@@ -1,20 +1,20 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 
-import { connectDB } from "./utils/features.js";
-import { errorMiddleware } from "./middlewares/error.js";
-import NodeCache from "node-cache";
+import cors from "cors";
 import { config } from "dotenv";
 import morgan from "morgan";
-import cors from "cors";
+import NodeCache from "node-cache";
+import { errorMiddleware } from "./middlewares/error.js";
+import { connectDB } from "./utils/features.js";
 
 // Importing Routes
 
-import userRoute from "./routes/user.js";
-import productRoute from "./routes/product.js";
+import Stripe from "stripe";
+import statsRoute from "./routes/admindata.js";
 import orderRoute from "./routes/order.js";
 import paymentRoute from "./routes/payment.js";
-import statsRoute from "./routes/admindata.js";
-import Stripe from "stripe";
+import productRoute from "./routes/product.js";
+import userRoute from "./routes/user.js";
 
 
 config({
