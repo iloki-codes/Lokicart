@@ -46,13 +46,13 @@ export const trendingProducts = TryCatch(
 
         let products = [];
 
-        // if(nodeCache.has("most-bought-products")) {
-        //     products = JSON.parse(nodeCache.get("most-bought-products") as string);
-        // }
-        // else {
+        if(nodeCache.has("most-bought-products")) {
+            products = JSON.parse(nodeCache.get("most-bought-products") as string);
+        }
+        else {
              products = await Product.find({}).sort({ createdAt: -1 });
              nodeCache.set("most-bought-products", JSON.stringify(products));
-            //}       // check in cache if it already exists or not and is faster than searching product again
+            }       // check in cache if it already exists or not and is faster than searching product again
 
         res.status(200).json({
             success: true,
