@@ -1,6 +1,6 @@
 import { FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { server } from "../redux/store";
+import { server } from "../redux/serverConfig";
 import { CartItemProps } from "../types/types";
 
 
@@ -9,7 +9,7 @@ const CartItemCard = ( {cartItem, incrementHandler, decrementHandler, removeHand
         const {photo, productId, name, price, quantity} = cartItem;
 
     return (
-    
+
         <div className="cart-item">
 
             <img src={`${server}/${photo}`} alt={name} />
