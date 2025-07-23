@@ -8,12 +8,12 @@ dotenv.config();
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy:{
-      "/api":{
-        target: process.env.VITE_SERVER_API , // backend url
-        changeOrigin: true,
-        secure: false
-      }
-    }
+    // proxy:{
+    //   "/api":{
+    //     target: process.env.VITE_SERVER_API , // backend url
+    //     changeOrigin: true,
+    //     secure: false
+    //   }
+    // }
   }
 })
