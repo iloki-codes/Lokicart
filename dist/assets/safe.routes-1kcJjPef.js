@@ -1,1 +1,0 @@
-import{j as t,N as o,O as x}from"./index-BnFQMRvb.js";const j=({isAuthenticated:e,children:s,adminRoute:r,isAdmin:u,redirect:a="/"})=>e?r&&!u?t.jsx(o,{to:a}):s||t.jsx(x,{}):t.jsx(o,{to:a});export{j as default};
