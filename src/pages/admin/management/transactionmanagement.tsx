@@ -1,35 +1,35 @@
 import { FaTrash } from "react-icons/fa";
-import { Link, useNavigate, useParams, Navigate } from "react-router-dom";
-import AdminSidebar from "../../../components/admin/AdminSidebar";
-import { Order, OrderItem } from "../../../types/types";
-import { server } from "../../../redux/store";
-import { UserReducerInitialState } from "../../../types/reducer.types";
 import { useSelector } from "react-redux";
-import { useDeleteOrderMutation, useGetOrderDetailsQuery, useProcessOrderMutation } from "../../../redux/api/orderAPI";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import AdminSidebar from "../../../components/admin/AdminSidebar";
 import { DeadLoader } from "../../../components/Loader";
+import { useDeleteOrderMutation, useGetOrderDetailsQuery, useProcessOrderMutation } from "../../../redux/api/orderAPI";
+import { server } from "../../../redux/serverConfig";
+import { UserReducerInitialState } from "../../../types/reducer.types";
+import { Order, OrderItem } from "../../../types/types";
 import { responseToast } from "../../../types/utils.features";
 
-const defaultData: Order = {
-    shippingInfo: {
-        address: "",
-        city: "",
-        country: "",
-        state: "",
-        pinCode: "",
-    },
-    status: "",
-    subtotal: 0,
-    shippingCharges: 0,
-    tax: 0,
-    discount: 0,
-    total: 0,
-    orderItems: [],
-    user: {
-        name: "",
-        _id: ""
-    },
-    _id: ""
-};
+// const defaultData: Order = {
+//     shippingInfo: {
+//         address: "",
+//         city: "",
+//         country: "",
+//         state: "",
+//         pinCode: "",
+//     },
+//     status: "",
+//     subtotal: 0,
+//     shippingCharges: 0,
+//     tax: 0,
+//     discount: 0,
+//     total: 0,
+//     orderItems: [],
+//     user: {
+//         name: "",
+//         _id: ""
+//     },
+//     _id: ""
+// };
 
 const ProductCard = ({
   name,
@@ -68,7 +68,7 @@ const TransactionManagement = (): JSX.Element => {
         tax,
         discount,
         total,
-    } = data?.order || defaultData;
+    } = data?.order!;   //  || defaultData;
 
 
     const [updateOrder] = useProcessOrderMutation();

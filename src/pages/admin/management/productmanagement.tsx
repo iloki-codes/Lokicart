@@ -1,12 +1,12 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
-import AdminSidebar from "../../../components/admin/AdminSidebar.tsx";
-import { UserReducerInitialState } from "../../../types/reducer.types.ts";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams, Navigate } from "react-router-dom";
-import { useDeleteProductMutation, useGetProductQuery, useUpdateProductMutation } from "../../../redux/api/productAPI.ts";
-import { server } from "../../../redux/store.ts";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import AdminSidebar from "../../../components/admin/AdminSidebar.tsx";
 import { DeadLoader } from "../../../components/Loader.tsx";
+import { useDeleteProductMutation, useGetProductQuery, useUpdateProductMutation } from "../../../redux/api/productAPI.ts";
+import { server } from "../../../redux/serverConfig.ts";
+import { UserReducerInitialState } from "../../../types/reducer.types.ts";
 import { responseToast } from "../../../types/utils.features.ts";
 
 
@@ -18,7 +18,7 @@ const Productmanagement = () => {
 
   const params = useParams();
   const navigate = useNavigate();
-  
+
   const { data, isLoading, isError } = useGetProductQuery(params.id!);
 
   const { price, stock, name, photo, category } = data?.product || {
@@ -59,7 +59,7 @@ const Productmanagement = () => {
 
   const updateHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-     
+
    const formData = new FormData();
 
     if(nameUpdate) formData.set("name", nameUpdate);
@@ -68,10 +68,10 @@ const Productmanagement = () => {
     if(categoryUpdate) formData.set("category", categoryUpdate);
     if(photoFile) formData.set("photo", photoFile);
 
-    const res = await updateProduct({ 
-      formData, 
-      userId: user?._id!, 
-      productId: data?.product._id! 
+    const res = await updateProduct({
+      formData,
+      userId: user?._id!,
+      productId: data?.product._id!
     });
 
     responseToast(res, navigate, "/admin/product");
@@ -79,50 +79,50 @@ const Productmanagement = () => {
 
   const deleteHandler = async () => {
 
-    const res = await deleteProduct({  
-      userId: user?._id!, 
-      productId: data?.product._id! 
+    const res = await deleteProduct({
+      userId: user?._id!,
+      productId: data?.product._id!
     });
 
     responseToast(res, navigate, "/admin/product");
   };
 
   useEffect(() => {
-    
+
     if (data) {
-    
+
       setNameUpdate(data.product.name);
       setPriceUpdate(data.product.price);
       setStockUpdate(data.product.stock);
       setCategoryUpdate(data.product.category);
-    
+
     }
-  
+
   }, [data]);
 
   return (
 
     <div className="admin-container">
-      
+
       <AdminSidebar />
-      
+
       <main className="product-management">
-        
+
         {
           isLoading ? (
             <DeadLoader />
           ) : (
-            
+
             <>
-            
+
               <section>
-        
+
                 <strong>PRODUCT ID - {data?.product._id}</strong>
-      
+
                 <img src={`${server}/${photo}`} alt="Product" />
-      
+
                 <p>{name}</p>
-        
+
                 {
                   stock > 0 ? (
                     <span className="green">{stock} Available</span>
@@ -130,53 +130,53 @@ const Productmanagement = () => {
                     <span className="red"> Not Available</span>
                   )
                 }
-        
+
                 <h3>₹{price}</h3>
-      
+
               </section>
-      
+
               <article>
-      
+
                 <button className="product-delete-btn" onClick={deleteHandler}>
-      
+
                   <FaTrash />
-      
+
                 </button>
-      
+
                 <form onSubmit={updateHandler}>
-      
+
                   <h2>Manage</h2>
-      
+
                   <div>
-      
+
                     <label>Name</label>
-      
+
                     <input
                       type="text"
                       placeholder="Name"
                       value={nameUpdate}
                       onChange={(e) => setNameUpdate(e.target.value)}
                     />
-      
+
                   </div>
-      
+
                   <div>
-      
+
                     <label>Price</label>
-      
+
                     <input
                       type="number"
                       placeholder="Price"
                       value={priceUpdate}
                       onChange={(e) => setPriceUpdate(Number(e.target.value))}
                     />
-      
+
                   </div>
-      
+
                   <div>
-      
+
                     <label>Stock</label>
-      
+
                     <input
                       type="number"
                       placeholder="Stock"
@@ -186,16 +186,16 @@ const Productmanagement = () => {
                   </div>
 
                   <div>
-      
+
                     <label>Category</label>
-      
+
                     <input
                       type="text"
                       placeholder="eg. laptop, camera etc"
                       value={categoryUpdate}
                       onChange={(e) => setCategoryUpdate(e.target.value)}
                     />
-      
+
                   </div>
 
                   <div>
@@ -206,22 +206,22 @@ const Productmanagement = () => {
                   {
                     photoUpdate && <img src={photoUpdate} alt="New Image" />
                   }
-          
+
                   <button type="submit">Update</button>
-        
+
                 </form>
-      
+
               </article>
-            
+
             </>
-          
+
           )
         }
-      
+
       </main>
-    
+
     </div>
-  
+
   );
 
 };
