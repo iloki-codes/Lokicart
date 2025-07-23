@@ -1,14 +1,15 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { VscError } from "react-icons/vsc";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import cartGif from "../assets/images/cartgif.mp4";
+import loki from "../assets/images/loki.png";
 import CartItemCard from "../components/cart-item";
 import { addToCart, amountSection, applyDiscount, removeFromCart } from "../redux/reducer/cartReducer";
+import { server } from "../redux/serverConfig";
 import { CartReducerInitialState } from "../types/reducer.types";
 import { CartItem } from "../types/types";
-import axios from "axios";
-import loki from "../assets/images/loki.png";
-import cartGif from "../assets/images/cartgif.mp4";
 
 const Cart = () => {
 
@@ -63,12 +64,12 @@ const Cart = () => {
     const { token: cancelToken, cancel } = axios.CancelToken.source();
 
     const timeoutId = setTimeout(() => {
-      axios.get(`/api/v1/payment/discount?couponCode=${couponCode}`, {
+      axios.get(`${server}/api/v1/payment/discount?couponCode=${couponCode}`, {
         cancelToken
       })
         .then((res) => {
           console.log(res.data);
-          dispatch(applyDiscount(res.data.discount ?? 0));
+          dispatch(applyDiscount(res.data.discount));
           setIsValid(true);
           dispatch(amountSection());
         })
