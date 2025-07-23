@@ -1,11 +1,12 @@
 ﻿import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BarResponse, LineResponse, PieResponse, StatsResponse } from "../../types/api-types";
+import { server } from "../serverConfig";
 
 
 export const dashboardAPI = createApi({
     reducerPath: "dashboardApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: "/api/v1/dashboard",
+        baseUrl: `${server}/api/v1/dashboard`,
         credentials: "include"
     }),
 

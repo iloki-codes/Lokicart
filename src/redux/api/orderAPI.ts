@@ -1,11 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { MessageResponse, MyOrdersResponse, NewOrderRequest, OrderDetailsResponse, ProcessOrderRequest } from "../../types/api-types";
+import { server } from "../serverConfig";
 
 
 export const orderAPI = createApi({
     reducerPath: "orderApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: "/api/v1/order",
+        baseUrl: `${server}/api/v1/order`,
         credentials: "include"
     }),
 

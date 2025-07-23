@@ -1,13 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { AllProductsResponse, DeleteProductRequest, getCategoriesResponse, MessageResponse, NewProductRequest, ProductResponse, SearchProductRequest, SearchProductResponse, UpdateProductRequest } from "../../types/api-types";
-import { Product } from "../../types/types";
+import { server } from "../serverConfig";
+// import { Product } from "../../types/types";
 // import axios from "axios";
 
 
 export const productAPI = createApi({
     reducerPath: "productApi",
     baseQuery: fetchBaseQuery({
-        baseUrl: `/api/v1/product/`,
+        baseUrl: `${server}/api/v1/product/`,
         credentials: "include"
     }),
 
