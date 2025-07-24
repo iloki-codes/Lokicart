@@ -171,8 +171,8 @@ export const processOrder = TryCatch (
             case "On the way": order.status="Delivered";
             break;
 
-            default: order.status="Processing";
-            break;
+            default: return next(new ErrorHandler("Unable to fetch the status", 400));
+
         }
 
         await order.save();
