@@ -65,6 +65,7 @@ const Cart = () => {
 
     const timeoutId = setTimeout(() => {
       axios.get(`${server}/api/v1/payment/discount?couponCode=${couponCode}`, {
+        withCredentials: true,
         cancelToken
       })
         .then((res) => {
