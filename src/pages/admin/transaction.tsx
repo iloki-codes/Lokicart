@@ -1,14 +1,14 @@
 import { ReactElement, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Column } from "react-table";
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import TableHOC from "../../components/admin/TableHOC";
-import { useSelector } from "react-redux";
-import { UserReducerInitialState } from "../../types/reducer.types";
-import { CustomError } from "../../types/api-types";
-import toast from "react-hot-toast";
-import { useGetAllOrdersQuery } from "../../redux/api/orderAPI";
 import { DeadLoader } from "../../components/Loader";
+import { useGetAllOrdersQuery } from "../../redux/api/orderAPI";
+import { RootState } from "../../redux/store";
+import { CustomError } from "../../types/api-types";
 
 interface DataType {
   user: string;
@@ -50,9 +50,7 @@ const columns: Column<DataType>[] = [
 
 const Transaction = () => {
 
-  const { user } = useSelector(
-    (state: { userReducer: UserReducerInitialState }) => state.userReducer
-  );
+  const { user } = useSelector((state: RootState) => state.userReducer);
 
   const { data, isLoading, isError, error } = useGetAllOrdersQuery(user?._id!);
 
@@ -72,11 +70,15 @@ const Transaction = () => {
             quantity: i.orderItems.length,
             status: (
               <span className={
-                i.status === "Processing"
-                ? "red"
-                : i.status === "Shipped"
-                ? "green"
-                : "purple"
+               i.status === "Processing"
+                    ? "blue"
+                    : i.status === "Shipped"
+                    ? "purple"
+                    : i.status === "On the way"
+                    ? "yellow"
+                    : i.status === "Delivered"
+                    ? "green"
+                    : "red"
               }
               >
                 {i.status}
