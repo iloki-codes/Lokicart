@@ -41,12 +41,33 @@ export const nodeCache = new NodeCache();
 
 const app = express();
 
+// app.use(cors({
+//     origin: [ "https://lokicart-mern.netlify.app/" ],  // , "http://localhost:5173" 
+//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//     credentials: true
+// }));
+
+
+const allowedOrigins = [
+    "http://localhost:5173", 
+    "https://lokicart-mern.netlify.app/"
+];
+
 app.use(cors({
-    origin: [ "https://lokicart-mern.netlify.app/" ],  // , "http://localhost:5173" 
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true
+    origin: function(origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null ,true);
+        } else {
+            callback(new Error("Not allowed by cors"));
+        }
+    },
+    credentials: true,
+    methods: [ "GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: [ "Content-Type", "Authorization" ]
 }));
+
+
 app.use(express.json());
 app.use(morgan("dev"));
 
