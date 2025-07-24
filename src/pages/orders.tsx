@@ -14,7 +14,7 @@ type DataType = {
     _id: string;
     amount: number;
     quantity: number;
-    discount: number | null;
+    discount: number;
     status: ReactElement;
     action: ReactElement;
 }
@@ -69,15 +69,19 @@ const Orders = () => {
               data?.orders.map( (i) => ({
                 _id: i._id,
                 amount: i.total,
-                discount: i.discount || null,
+                discount: i.discount,
                 quantity: i.orderItems.length,
                 status: (
                   <span className={
                     i.status === "Processing"
-                    ? "red"
+                    ? "blue"
                     : i.status === "Shipped"
+                    ? "purple"
+                    : i.status === "On the way"
+                    ? "yellow"
+                    : i.status === "Delivered"
                     ? "green"
-                    : "purple"
+                    : "red"
                   }
                   >
                     {i.status}
