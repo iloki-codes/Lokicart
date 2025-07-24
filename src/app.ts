@@ -41,44 +41,44 @@ export const nodeCache = new NodeCache();
 
 const app = express();
 
-// app.use(cors({
-//     origin: [ "https://lokicart-mern.netlify.app/" ],  // , "http://localhost:5173" 
-//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-//     allowedHeaders: ["Content-Type", "Authorization"],
-//     credentials: true
-// }));
-
-
-const allowedOrigins = [
-    "http://localhost:5173", 
-    "https://lokicart-mern.netlify.app/"
-];
-
 app.use(cors({
-    origin: function(origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null ,true);
-        } else {
-            callback(new Error("Not allowed by cors"));
-        }
-    },
-    credentials: true,
-    methods: [ "GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: [ "Content-Type", "Authorization" ]
+    origin: [ "https://lokicart-mern.netlify.app/" ],  // , "http://localhost:5173" 
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
 }));
+
+
+// const allowedOrigins = [
+//     "http://localhost:5173", 
+//     "https://lokicart-mern.netlify.app/"
+// ];
+
+// app.use(cors({
+//     origin: function(origin, callback) {
+//         if (!origin || allowedOrigins.includes(origin)) {
+//             callback(null ,true);
+//         } else {
+//             callback(new Error("Not allowed by cors"));
+//         }
+//     },
+//     credentials: true,
+//     methods: [ "GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//     allowedHeaders: [ "Content-Type", "Authorization" ]
+// }));
 
 
 app.use(express.json());
 app.use(morgan("dev"));
 
 
-app.options("*", (req: Request, res: Response) => {
-    res.header("Access-Control-Allow-Origin", req.headers.origin);
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.sendStatus(200);
-});
+// app.options("*", (req: Request, res: Response) => {
+//     res.header("Access-Control-Allow-Origin", req.headers.origin);
+//     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//     res.header("Access-Control-Allow-Credentials", "true");
+//     res.sendStatus(200);
+// });
 
 app.get("/", (req:Request, res:Response) => {
     res.send("API working with /api/v1");
