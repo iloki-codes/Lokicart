@@ -7,6 +7,7 @@ export const orderAPI = createApi({
     reducerPath: "orderApi",
     baseQuery: fetchBaseQuery({
         baseUrl: `${server}/api/v1/order`,
+        mode: "cors",
         credentials: "include",
         headers: {
             "Content-Type": "application/json"
