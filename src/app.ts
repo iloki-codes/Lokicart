@@ -66,13 +66,13 @@ app.use(cors({
 //     methods: [ "GET", "POST", "PUT", "DELETE", "OPTIONS"],
 //     allowedHeaders: [ "Content-Type", "Authorization" ]
 // }));
-app.options("*", (req: Request, res: Response) => {
-    res.header("Access-Control-Allow-Origin", "https://lokicart-mern.netlify.app/");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, HEAD, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Origin, Authorization");
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.sendStatus(200);
-});
+// app.options("*", (req: Request, res: Response) => {
+//     res.header("Access-Control-Allow-Origin", "https://lokicart-mern.netlify.app/");
+//     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, HEAD, OPTIONS");
+//     res.header("Access-Control-Allow-Headers", "Content-Type, Origin, Authorization");
+//     res.header("Access-Control-Allow-Credentials", "true");
+//     res.sendStatus(200);
+// });
 
 app.use(express.json());
 app.use(morgan("dev"));
