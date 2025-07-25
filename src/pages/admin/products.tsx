@@ -9,8 +9,9 @@ import TableHOC from "../../components/admin/TableHOC";
 import { DeadLoader } from "../../components/Loader";
 import { useGetAllProductsQuery } from "../../redux/api/productAPI";
 import { server } from "../../redux/serverConfig";
+import { RootState } from "../../redux/store";
 import { CustomError } from "../../types/api-types";
-import { UserReducerInitialState } from "../../types/reducer.types";
+// import { UserReducerInitialState } from "../../types/reducer.types";
 
 interface DataType {
   photo: ReactElement;
@@ -45,9 +46,7 @@ const columns: Column<DataType>[] = [
 
 const Products = () => {
 
-  const { user } = useSelector(
-    (state: { userReducer: UserReducerInitialState }) => state.userReducer
-  );
+  const { user } = useSelector((state: RootState) => state.userReducer);
 
   const { data, isLoading, isError, error } = useGetAllProductsQuery(user?._id!);
 
