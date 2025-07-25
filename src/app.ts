@@ -42,13 +42,13 @@ export const nodeCache = new NodeCache();
 const app = express();
 
 app.use(cors({ 
-    origin: "*",
+    origin: "https://lokicart-mern.netlify.app/",
     methods: ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],
-    allowedHeaders: "*"
+   
     
 }));
 //  origin: [ "https://lokicart-mern.netlify.app/", "http://localhost:5173" ],   ["Content-Type", "Origin", "Authorization"] credentials: true
-
+//  allowedHeaders: "*"
 // const allowedOrigins = [
 //     "http://localhost:5173", 
 //     "https://lokicart-mern.netlify.app/"
