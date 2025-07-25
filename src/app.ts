@@ -66,7 +66,7 @@ app.use(cors({
 //     methods: [ "GET", "POST", "PUT", "DELETE", "OPTIONS"],
 //     allowedHeaders: [ "Content-Type", "Authorization" ]
 // }));
-app.options((origin), req: Request, res: Response) => {
+app.options(origin, (req: Request, res: Response) => {
     res.header("Access-Control-Allow-Origin", req.headers.origin);
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE,HEAD, OPTIONS");
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
