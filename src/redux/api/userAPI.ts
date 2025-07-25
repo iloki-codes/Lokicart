@@ -9,7 +9,10 @@ export const userAPI = createApi({
     reducerPath: "userApi",
     baseQuery: fetchBaseQuery({
         baseUrl: `${server}/api/v1/user/`,
-        credentials: "include"
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
     }),                                                         // localhost/api/v1/user/ - backend url in vite config file
     tagTypes: ["users"],
     endpoints: (builder) => ({
@@ -50,7 +53,10 @@ export const getUser = async (id: string) => {
         const { data }: { data: UserResponse} = await axios.get(
             `${server}/api/v1/user/${id}`,
             {
-                withCredentials: true
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "application/json"
+                }
             }
         );
         return data;

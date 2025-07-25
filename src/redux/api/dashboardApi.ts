@@ -7,7 +7,10 @@ export const dashboardAPI = createApi({
     reducerPath: "dashboardApi",
     baseQuery: fetchBaseQuery({
         baseUrl: `${server}/api/v1/dashboard`,
-        credentials: "include"
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
     }),
 
     endpoints: (builder) => ({

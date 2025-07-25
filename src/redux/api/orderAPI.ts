@@ -7,7 +7,10 @@ export const orderAPI = createApi({
     reducerPath: "orderApi",
     baseQuery: fetchBaseQuery({
         baseUrl: `${server}/api/v1/order`,
-        credentials: "include"
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
     }),
 
     tagTypes: ["orders"],
@@ -26,17 +29,26 @@ export const orderAPI = createApi({
         }),
 
         myOrders: builder.query<MyOrdersResponse, string>({
-            query: (id) => `my?id=${id}`,
+            query: (id) => ({
+                url: `my?id=${id}`,
+                method: "GET"
+            }),
                 providesTags: ["orders"]
         }),
 
         getAllOrders: builder.query<MyOrdersResponse, string>({
-            query: (id) => `all?id=${id}`,
+            query: (id) => ({
+                url: `all?id=${id}`,
+                method: "GET"
+            }),
                 providesTags: ["orders"]
         }),
 
         getOrderDetails: builder.query<OrderDetailsResponse, string>({
-            query: (id) => id,
+            query: (id) => ({
+                url: id,
+                method: "GET"
+            }),
                 providesTags: ["orders"]
         }),
 

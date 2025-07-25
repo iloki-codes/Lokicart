@@ -9,7 +9,10 @@ export const productAPI = createApi({
     reducerPath: "productApi",
     baseQuery: fetchBaseQuery({
         baseUrl: `${server}/api/v1/product/`,
-        credentials: "include"
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
     }),
 
     tagTypes: ["product"],
@@ -63,7 +66,10 @@ export const productAPI = createApi({
         }),
 
         getProduct: builder.query<ProductResponse, string>({
-            query: (id) => id,
+            query: (id) => ({
+                url: id,
+                method: "GET"
+            }),
             providesTags: ["product"]
         }),
 
