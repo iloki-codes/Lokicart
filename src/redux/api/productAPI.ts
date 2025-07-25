@@ -9,6 +9,7 @@ export const productAPI = createApi({
     reducerPath: "productApi",
     baseQuery: fetchBaseQuery({
         baseUrl: `${server}/api/v1/product/`,
+        mode: "cors",
         credentials: "include",
         headers: {
             "Content-Type": "application/json"
