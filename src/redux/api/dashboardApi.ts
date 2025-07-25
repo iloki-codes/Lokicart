@@ -7,6 +7,7 @@ export const dashboardAPI = createApi({
     reducerPath: "dashboardApi",
     baseQuery: fetchBaseQuery({
         baseUrl: `${server}/api/v1/dashboard`,
+        mode: "cors",
         credentials: "include",
         headers: {
             "Content-Type": "application/json"
