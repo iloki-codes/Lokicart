@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { saveShippingInfo } from "../redux/reducer/cartReducer";
 import { server } from "../redux/serverConfig";
-import { CartReducerInitialState } from "../types/reducer.types";
+import { RootState } from "../redux/store";
+// import { CartReducerInitialState } from "../types/reducer.types";
 
 const Shipping = () => {
 
@@ -17,7 +18,7 @@ const Shipping = () => {
     // shippingCharges,
     // discount,
     total
-  } = useSelector((state: { cartReducer: CartReducerInitialState }) => state.cartReducer);
+  } = useSelector((state: RootState) => state.cartReducer);
 
 
   const navigate = useNavigate();
