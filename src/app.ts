@@ -44,10 +44,10 @@ const app = express();
 app.use(cors({ 
     origin: "https://lokicart-mern.netlify.app",
     methods: ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],
-   
+   credentials: true
     
 }));
-//  origin: [ "https://lokicart-mern.netlify.app/", "http://localhost:5173" ],   ["Content-Type", "Origin", "Authorization"] credentials: true
+//  origin: [ "https://lokicart-mern.netlify.app/", "http://localhost:5173" ],   ["Content-Type", "Origin", "Authorization"] 
 //  allowedHeaders: "*"
 // const allowedOrigins = [
 //     "http://localhost:5173", 
