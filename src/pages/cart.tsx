@@ -8,7 +8,7 @@ import loki from "../assets/images/loki.png";
 import CartItemCard from "../components/cart-item";
 import { addToCart, amountSection, applyDiscount, removeFromCart } from "../redux/reducer/cartReducer";
 import { server } from "../redux/serverConfig";
-import { CartReducerInitialState } from "../types/reducer.types";
+import { RootState } from "../redux/store";
 import { CartItem } from "../types/types";
 
 const Cart = () => {
@@ -20,7 +20,7 @@ const Cart = () => {
     shippingCharges,
     discount,
     total,
-  } = useSelector((state: { cartReducer: CartReducerInitialState }) => state.cartReducer);
+  } = useSelector((state: RootState) => state.cartReducer);
 
   const [couponCode, setCouponCode] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
@@ -66,6 +66,9 @@ const Cart = () => {
     const timeoutId = setTimeout(() => {
       axios.get(`${server}/api/v1/payment/discount?couponCode=${couponCode}`, {
         withCredentials: true,
+        headers: {
+            "Content-Type": "application/json"
+        },
         cancelToken
       })
         .then((res) => {
